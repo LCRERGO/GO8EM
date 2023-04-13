@@ -1,0 +1,32 @@
+package utils
+
+import (
+	"reflect"
+	"runtime"
+	"unsafe"
+
+	"golang.org/x/exp/constraints"
+)
+
+func GetFunctionName(i interface{}) string {
+	return runtime.FuncForPC(reflect.ValueOf(i).Pointer()).Name()
+}
+
+func byte2Short(dataSlice []byte) uint16 {
+	return uint16(dataSlice[1])<<8 + uint16(dataSlice[0])
+}
+
+func Num2Bin[T constraints.Integer](n T) string {
+	var str string
+	size := unsafe.Sizeof(n) * 8
+
+	for i := 0; i < int(size); i++ {
+		if (n>>i)&0x1 == 0x1 {
+			str += "1"
+		} else {
+			str += "0"
+		}
+	}
+
+	return str
+}
