@@ -13,5 +13,7 @@ type Chip8 struct {
 }
 
 func NewChip8() Chip8 {
-	return Chip8{}
+	return Chip8{
+		Stack: stack.NewStack(),
+	}
 }
