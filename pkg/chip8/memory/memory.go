@@ -1,5 +1,7 @@
 package memory
 
+import "github.com/LCRERGO/GO8EM/pkg/constants"
+
 // +---------------+= 0xFFF (4095) End of Chip-8 RAM
 // |               |
 // |               |
@@ -27,7 +29,7 @@ package memory
 // 0x000 to 0xFFF, thus having
 // 4096 (0x1000) bytes in total
 type Memory struct {
-	data [0x1000]byte
+	data [constants.MemorySize]byte
 }
 
 func Set(mem *Memory, index int, val uint8) {

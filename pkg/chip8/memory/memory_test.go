@@ -3,6 +3,7 @@ package memory
 import (
 	"testing"
 
+	"github.com/LCRERGO/GO8EM/pkg/constants"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -22,7 +23,7 @@ func TestSet(t *testing.T) {
 			value:  0x42,
 
 			wantMemoryState: Memory{
-				data: [0x1000]byte{0x42},
+				data: [constants.MemorySize]byte{0x42},
 			},
 		},
 		{
@@ -32,7 +33,7 @@ func TestSet(t *testing.T) {
 			value:  0x42,
 
 			wantMemoryState: Memory{
-				data: [0x1000]byte{0xFFF: 0x42},
+				data: [constants.MemorySize]byte{0xFFF: 0x42},
 			},
 		},
 	}
@@ -57,24 +58,24 @@ func TestGet(t *testing.T) {
 		{
 			name: "get at begin",
 			memory: Memory{
-				data: [0x1000]byte{0x42},
+				data: [constants.MemorySize]byte{0x42},
 			},
 			index: 0x000,
 
 			wantMemoryState: Memory{
-				data: [0x1000]byte{0x42},
+				data: [constants.MemorySize]byte{0x42},
 			},
 			want: 0x42,
 		},
 		{
 			name: "get at begin",
 			memory: Memory{
-				data: [0x1000]byte{0xFFF: 0x42},
+				data: [constants.MemorySize]byte{0xFFF: 0x42},
 			},
 			index: 0xFFF,
 
 			wantMemoryState: Memory{
-				data: [0x1000]byte{0xFFF: 0x42},
+				data: [constants.MemorySize]byte{0xFFF: 0x42},
 			},
 			want: 0x42,
 		},
@@ -102,24 +103,24 @@ func TestGet16(t *testing.T) {
 		{
 			name: "get at begin",
 			memory: Memory{
-				data: [0x1000]byte{0xDE, 0xAD},
+				data: [constants.MemorySize]byte{0xDE, 0xAD},
 			},
 			index: 0x000,
 
 			wantMemoryState: Memory{
-				data: [0x1000]byte{0xDE, 0xAD},
+				data: [constants.MemorySize]byte{0xDE, 0xAD},
 			},
 			want: 0xDEAD,
 		},
 		{
 			name: "get at begin",
 			memory: Memory{
-				data: [0x1000]byte{0xFFE: 0xBE, 0xFFF: 0xEF},
+				data: [constants.MemorySize]byte{0xFFE: 0xBE, 0xFFF: 0xEF},
 			},
 			index: 0xFFE,
 
 			wantMemoryState: Memory{
-				data: [0x1000]byte{0xFFE: 0xBE, 0xFFF: 0xEF},
+				data: [constants.MemorySize]byte{0xFFE: 0xBE, 0xFFF: 0xEF},
 			},
 			want: 0xBEEF,
 		},
