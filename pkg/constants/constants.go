@@ -1,6 +1,7 @@
 package constants
 
 const (
+	WindowTitle         = "GO8EM"
 	MemorySize          = 0x1000
 	ProgramStartAddress = 0x200
 	ScreenWidth         = 64

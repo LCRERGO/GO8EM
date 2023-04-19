@@ -6,6 +6,10 @@ type Screen struct {
 	pixels [constants.ScreenWidth][constants.ScreenHeight]bool
 }
 
+func NewScreen() *Screen {
+	return &Screen{}
+}
+
 func Clear(screen *Screen) {
 	screen.pixels = [constants.ScreenWidth][constants.ScreenHeight]bool{}
 }

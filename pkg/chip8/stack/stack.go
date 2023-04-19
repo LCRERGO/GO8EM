@@ -10,8 +10,8 @@ type Stack struct {
 	data []uint16
 }
 
-func NewStack() Stack {
-	return Stack{
+func NewStack() *Stack {
+	return &Stack{
 		data: make([]uint16, 0, 0x10),
 	}
 }
