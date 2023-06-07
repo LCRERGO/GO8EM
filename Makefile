@@ -1,7 +1,7 @@
 VERSION = 1.0.0
 
 BUILDDIR = build
-GOCMD = go
+GOCMD = env go
 GOENVS = GOOS=js GOARCH=wasm
 
 all: main
@@ -10,10 +10,10 @@ main:
 	mkdir -p $(BUILDDIR)
 	$(GOCMD) build -o $(BUILDDIR)/main-$(VERSION) cmd/main.go
 
-test:
+check:
 	$(GOCMD) test ./...
 
-test/all:
+check/all:
 	GOCACHE=off TEST_ALL=1  $(GOCMD) test ./...
 
 clean:
@@ -24,4 +24,4 @@ install:
 uninstall:
 
 
-.PHONY: all main test clean install uninstall
+.PHONY: all main check clean install uninstall
