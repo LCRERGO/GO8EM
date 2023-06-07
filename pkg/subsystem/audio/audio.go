@@ -30,6 +30,7 @@ package audio
 // }
 import "C"
 import (
+	"log"
 	"math"
 	"reflect"
 	"unsafe"
@@ -41,9 +42,9 @@ type AudioSubsystem struct {
 	SampleRate int
 }
 
-func NewAudioSubsystem(sampleRate int) *AudioSubsystem {
+func New(sampleRate int) *AudioSubsystem {
 	if err := sdl.Init(sdl.INIT_AUDIO); err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	return &AudioSubsystem{
@@ -65,7 +66,7 @@ func Beep(audio AudioSubsystem, frequency, duration int) {
 	}
 
 	if err := sdl.OpenAudio(&spec, nil); err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	sdl.PauseAudio(false)

@@ -10,10 +10,14 @@ type Stack struct {
 	data []uint16
 }
 
-func NewStack() *Stack {
+func New() *Stack {
 	return &Stack{
 		data: make([]uint16, 0, 0x10),
 	}
+}
+
+func Destroy(stack *Stack) {
+	stack = nil
 }
 
 func Push(stack *Stack, registers *register.RegisterFile, address uint16) {

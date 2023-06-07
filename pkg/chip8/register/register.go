@@ -7,3 +7,11 @@ type RegisterFile struct {
 	SP     uint8      // Stack Pointer
 	PC     uint16     // Program Counter
 }
+
+func New() *RegisterFile {
+	return &RegisterFile{}
+}
+
+func Destroy(registerFile *RegisterFile) {
+	registerFile = nil
+}

@@ -6,8 +6,12 @@ type Screen struct {
 	pixels [constants.ScreenWidth][constants.ScreenHeight]bool
 }
 
-func NewScreen() *Screen {
+func New() *Screen {
 	return &Screen{}
+}
+
+func Destroy(screen *Screen) {
+	screen = nil
 }
 
 func Clear(screen *Screen) {

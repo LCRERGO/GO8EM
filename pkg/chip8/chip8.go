@@ -8,15 +8,26 @@ import (
 )
 
 type Chip8 struct {
-	Memory    memory.Memory
+	Memory    *memory.Memory
 	Stack     *stack.Stack
-	Registers register.RegisterFile
+	Registers *register.RegisterFile
 	Screen    *screen.Screen
 }
 
-func NewChip8() Chip8 {
-	return Chip8{
-		Stack:  stack.NewStack(),
-		Screen: screen.NewScreen(),
+func New() *Chip8 {
+	return &Chip8{
+		Memory:    memory.New(),
+		Stack:     stack.New(),
+		Registers: register.New(),
+		Screen:    screen.New(),
 	}
+}
+
+func Destroy(chip8 *Chip8) {
+	screen.Destroy(chip8.Screen)
+	register.Destroy(chip8.Registers)
+	stack.Destroy(chip8.Stack)
+	memory.Destroy(chip8.Memory)
+
+	chip8 = nil
 }

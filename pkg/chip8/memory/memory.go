@@ -32,6 +32,14 @@ type Memory struct {
 	data [constants.MemorySize]byte
 }
 
+func New() *Memory {
+	return &Memory{}
+}
+
+func Destroy(memory *Memory) {
+	memory = nil
+}
+
 func Set(mem *Memory, index int, val uint8) {
 	mem.data[index] = val
 }

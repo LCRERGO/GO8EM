@@ -1,6 +1,8 @@
 package video
 
 import (
+	"log"
+
 	"github.com/LCRERGO/GO8EM/pkg/chip8/screen"
 	"github.com/LCRERGO/GO8EM/pkg/constants"
 	"github.com/veandco/go-sdl2/sdl"
@@ -11,9 +13,9 @@ type VideoSubsystem struct {
 	Renderer *sdl.Renderer
 }
 
-func NewDisplay() VideoSubsystem {
+func New() *VideoSubsystem {
 	if err := sdl.Init(sdl.INIT_VIDEO); err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	window, err := sdl.CreateWindow(constants.WindowTitle,
@@ -22,15 +24,15 @@ func NewDisplay() VideoSubsystem {
 		constants.ScreenHeight*constants.ScreenScaleFactor,
 		sdl.WINDOW_SHOWN)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	renderer, err := sdl.CreateRenderer(window, -1, sdl.TEXTUREACCESS_TARGET)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
-	return VideoSubsystem{
+	return &VideoSubsystem{
 		Window:   window,
 		Renderer: renderer,
 	}
@@ -39,15 +41,15 @@ func NewDisplay() VideoSubsystem {
 func Render(video *VideoSubsystem, screenData *screen.Screen) {
 	err := video.Renderer.SetDrawColor(0, 0, 0, sdl.ALPHA_OPAQUE)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	err = video.Renderer.Clear()
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	err = video.Renderer.SetDrawColor(255, 255, 255, sdl.ALPHA_OPAQUE)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	for x := 0; x < constants.ScreenWidth; x++ {
