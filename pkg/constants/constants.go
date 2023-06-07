@@ -10,4 +10,6 @@ const (
 
 	CharacterSetStartAddress = 0x00
 	DefaultSpriteHeight      = 5
+
+	ClockFrequency = 700
 )

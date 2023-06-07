@@ -17,7 +17,7 @@ check/all:
 	GOCACHE=off TEST_ALL=1  $(GOCMD) test ./...
 
 clean:
-	rm -rf $(BUILDDIR) $(WEBDIR)/js/main.wasm
+	rm -rf $(BUILDDIR)
 
 install:
 

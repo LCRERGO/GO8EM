@@ -12,6 +12,14 @@ func New() *RegisterFile {
 	return &RegisterFile{}
 }
 
-func Destroy(registerFile *RegisterFile) {
-	registerFile = nil
+func Destroy(registers *RegisterFile) {
+	registers = nil
+}
+
+func DecDT(registers *RegisterFile) {
+	registers.DT--
+}
+
+func DecST(registers *RegisterFile) {
+	registers.ST--
 }

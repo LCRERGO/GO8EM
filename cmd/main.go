@@ -1,5 +1,3 @@
-package main
-
 // A simple CHIP-8 emulator written in Golang
 // Copyright (C) 2023  Lucas Cruz dos Reis <lcr.ergo@gmail.com>
 //
@@ -15,7 +13,27 @@ package main
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+package main
+
+import (
+	"fmt"
+	"os"
+
+	"github.com/LCRERGO/GO8EM/pkg/chip8"
+	"github.com/LCRERGO/GO8EM/pkg/subsystem"
+)
 
 func main() {
+	if len(os.Args) < 2 {
+		fmt.Printf("Usage: %s filename\n", os.Args[0])
+		os.Exit(1)
+	}
 
+	c8 := chip8.New()
+	defer chip8.Destroy(c8)
+	controller := subsystem.New(c8)
+	subsystem.AddROM(controller, os.Args[1])
+	defer subsystem.RemoveROM(controller)
+
+	subsystem.Run(controller)
 }
