@@ -3,44 +3,49 @@ package memory
 import (
 	"testing"
 
-	"github.com/LCRERGO/GO8EM/pkg/constants"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestSet(t *testing.T) {
 	tests := []struct {
 		name   string
-		memory Memory
+		memory *Memory
 		index  int
 		value  uint8
 
-		wantMemoryState Memory
+		wantMemoryState *Memory
 	}{
 		{
 			name:   "set at begin",
-			memory: Memory{},
+			memory: New(),
 			index:  0x000,
 			value:  0x42,
 
-			wantMemoryState: Memory{
-				data: [constants.MemorySize]byte{0x42},
-			},
+			wantMemoryState: func() *Memory {
+				state := New()
+				copy(state.data, []byte{0x42})
+
+				return state
+			}(),
 		},
 		{
 			name:   "set at end",
-			memory: Memory{},
+			memory: New(),
 			index:  0xFFF,
 			value:  0x42,
 
-			wantMemoryState: Memory{
-				data: [constants.MemorySize]byte{0xFFF: 0x42},
-			},
+			wantMemoryState: func() *Memory {
+				state := New()
+				copy(state.data[0xFFF:0x1000], []byte{0x42})
+
+				return state
+			}(),
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			Set(&tt.memory, tt.index, tt.value)
+			Set(tt.memory, tt.index, tt.value)
 			assert.Equal(t, tt.wantMemoryState, tt.memory)
 		})
 	}
@@ -49,34 +54,46 @@ func TestSet(t *testing.T) {
 func TestGet(t *testing.T) {
 	tests := []struct {
 		name   string
-		memory Memory
+		memory *Memory
 		index  int
 
-		wantMemoryState Memory
+		wantMemoryState *Memory
 		want            uint8
 	}{
 		{
 			name: "get at begin",
-			memory: Memory{
-				data: [constants.MemorySize]byte{0x42},
-			},
+			memory: func() *Memory {
+				state := New()
+				copy(state.data, []byte{0x42})
+
+				return state
+			}(),
 			index: 0x000,
 
-			wantMemoryState: Memory{
-				data: [constants.MemorySize]byte{0x42},
-			},
+			wantMemoryState: func() *Memory {
+				state := New()
+				copy(state.data, []byte{0x42})
+
+				return state
+			}(),
 			want: 0x42,
 		},
 		{
-			name: "get at begin",
-			memory: Memory{
-				data: [constants.MemorySize]byte{0xFFF: 0x42},
-			},
+			name: "get at end",
+			memory: func() *Memory {
+				state := New()
+				copy(state.data[0xFFF:0x1000], []byte{0x42})
+
+				return state
+			}(),
 			index: 0xFFF,
 
-			wantMemoryState: Memory{
-				data: [constants.MemorySize]byte{0xFFF: 0x42},
-			},
+			wantMemoryState: func() *Memory {
+				state := New()
+				copy(state.data[0xFFF:0x1000], []byte{0x42})
+
+				return state
+			}(),
 			want: 0x42,
 		},
 	}
@@ -94,34 +111,46 @@ func TestGet(t *testing.T) {
 func TestGet16(t *testing.T) {
 	tests := []struct {
 		name   string
-		memory Memory
+		memory *Memory
 		index  int
 
-		wantMemoryState Memory
+		wantMemoryState *Memory
 		want            uint16
 	}{
 		{
 			name: "get at begin",
-			memory: Memory{
-				data: [constants.MemorySize]byte{0xDE, 0xAD},
-			},
+			memory: func() *Memory {
+				state := New()
+				copy(state.data, []byte{0xDE, 0xAD})
+
+				return state
+			}(),
 			index: 0x000,
 
-			wantMemoryState: Memory{
-				data: [constants.MemorySize]byte{0xDE, 0xAD},
-			},
+			wantMemoryState: func() *Memory {
+				state := New()
+				copy(state.data, []byte{0xDE, 0xAD})
+
+				return state
+			}(),
 			want: 0xDEAD,
 		},
 		{
-			name: "get at begin",
-			memory: Memory{
-				data: [constants.MemorySize]byte{0xFFE: 0xBE, 0xFFF: 0xEF},
-			},
+			name: "get at end",
+			memory: func() *Memory {
+				state := New()
+				copy(state.data[0xFFE:0x1000], []byte{0xBE, 0xEF})
+
+				return state
+			}(),
 			index: 0xFFE,
 
-			wantMemoryState: Memory{
-				data: [constants.MemorySize]byte{0xFFE: 0xBE, 0xFFF: 0xEF},
-			},
+			wantMemoryState: func() *Memory {
+				state := New()
+				copy(state.data[0xFFE:0x1000], []byte{0xBE, 0xEF})
+
+				return state
+			}(),
 			want: 0xBEEF,
 		},
 	}

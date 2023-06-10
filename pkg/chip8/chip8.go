@@ -1,3 +1,4 @@
+// Package of chip8 general purpose interface
 package chip8
 
 import (
@@ -7,6 +8,8 @@ import (
 	"github.com/LCRERGO/GO8EM/pkg/chip8/stack"
 )
 
+// Chip8 entity is the logical representation of
+// the components of the chip8
 type Chip8 struct {
 	Memory    *memory.Memory
 	Stack     *stack.Stack
@@ -14,6 +17,7 @@ type Chip8 struct {
 	Screen    *screen.Screen
 }
 
+// Create a new Chip8
 func New() *Chip8 {
 	return &Chip8{
 		Memory:    memory.New(),
@@ -23,6 +27,17 @@ func New() *Chip8 {
 	}
 }
 
+// Deep Copy a Chip8.
+func Copy(chip8 *Chip8) *Chip8 {
+	return &Chip8{
+		Memory:    memory.Copy(chip8.Memory),
+		Stack:     stack.Copy(chip8.Stack),
+		Registers: register.Copy(chip8.Registers),
+		Screen:    screen.Copy(chip8.Screen),
+	}
+}
+
+// Destroy a Chip8
 func Destroy(chip8 *Chip8) {
 	screen.Destroy(chip8.Screen)
 	register.Destroy(chip8.Registers)

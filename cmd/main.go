@@ -1,4 +1,4 @@
-// A simple CHIP-8 emulator written in Golang
+// A simple CHIP-8 emulator written in Golang.
 // Copyright (C) 2023  Lucas Cruz dos Reis <lcr.ergo@gmail.com>
 //
 // This program is free software: you can redistribute it and/or modify

@@ -3,37 +3,39 @@ package screen
 import (
 	"testing"
 
-	"github.com/LCRERGO/GO8EM/pkg/constants"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestClear(t *testing.T) {
 	tests := []struct {
 		name   string
-		screen Screen
+		screen *Screen
 
-		wantScreenState Screen
+		wantScreenState *Screen
 	}{
 		{
 			name:            "screen clear empty screen",
-			screen:          Screen{},
-			wantScreenState: Screen{},
+			screen:          New(),
+			wantScreenState: New(),
 		},
 		{
 			name: "screen clear with pixels set at borders",
-			screen: Screen{
-				pixels: [constants.ScreenWidth][constants.ScreenHeight]bool{
-					0:  {0: true, 31: true},
-					63: {0: true, 31: true},
-				},
-			},
-			wantScreenState: Screen{},
+			screen: func() *Screen {
+				state := New()
+				state.pixels[0][0] = true
+				state.pixels[0][31] = true
+				state.pixels[63][0] = true
+				state.pixels[63][31] = true
+
+				return state
+			}(),
+			wantScreenState: New(),
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			Clear(&tt.screen)
+			Clear(tt.screen)
 
 			assert.Equal(t, tt.wantScreenState, tt.screen)
 		})
@@ -43,56 +45,68 @@ func TestClear(t *testing.T) {
 func TestSet(t *testing.T) {
 	tests := []struct {
 		name   string
-		screen Screen
+		screen *Screen
 		x, y   int
 
-		wantScreenState Screen
+		wantScreenState *Screen
 	}{
 		{
 			name:   "set first pixel",
-			screen: Screen{},
+			screen: New(),
 			x:      0,
 			y:      0,
 
-			wantScreenState: Screen{
-				pixels: [constants.ScreenWidth][constants.ScreenHeight]bool{{true}},
-			},
+			wantScreenState: func() *Screen {
+				state := New()
+				state.pixels[0][0] = true
+
+				return state
+			}(),
 		},
 		{
 			name:   "set last column pixel",
-			screen: Screen{},
+			screen: New(),
 			x:      0,
 			y:      31,
 
-			wantScreenState: Screen{
-				pixels: [constants.ScreenWidth][constants.ScreenHeight]bool{{31: true}},
-			},
+			wantScreenState: func() *Screen {
+				state := New()
+				state.pixels[0][31] = true
+
+				return state
+			}(),
 		},
 		{
 			name:   "set last row pixel",
-			screen: Screen{},
+			screen: New(),
 			x:      63,
 			y:      0,
 
-			wantScreenState: Screen{
-				pixels: [constants.ScreenWidth][constants.ScreenHeight]bool{63: {true}},
-			},
+			wantScreenState: func() *Screen {
+				state := New()
+				state.pixels[63][0] = true
+
+				return state
+			}(),
 		},
 		{
 			name:   "set last pixel",
-			screen: Screen{},
+			screen: New(),
 			x:      63,
 			y:      31,
 
-			wantScreenState: Screen{
-				pixels: [constants.ScreenWidth][constants.ScreenHeight]bool{63: {31: true}},
-			},
+			wantScreenState: func() *Screen {
+				state := New()
+				state.pixels[63][31] = true
+
+				return state
+			}(),
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			Set(&tt.screen, tt.x, tt.y)
+			Set(tt.screen, tt.x, tt.y)
 
 			assert.Equal(t, tt.wantScreenState, tt.screen)
 		})
@@ -102,39 +116,44 @@ func TestSet(t *testing.T) {
 func TestIsSet(t *testing.T) {
 	tests := []struct {
 		name   string
-		screen Screen
+		screen *Screen
 		x, y   int
 
-		wantScreenState Screen
+		wantScreenState *Screen
 		want            bool
 	}{
 		{
 			name:   "check middle pixel on an empty screen",
-			screen: Screen{},
+			screen: New(),
 			x:      31,
 			y:      15,
 
-			wantScreenState: Screen{},
+			wantScreenState: New(),
 			want:            false,
 		},
 		{
 			name: "check middle pixel with pixel set",
-			screen: Screen{
-				pixels: [constants.ScreenWidth][constants.ScreenHeight]bool{31: {15: true}},
-			},
+			screen: func() *Screen {
+				state := New()
+				state.pixels[31][15] = true
+
+				return state
+			}(),
 			x: 31,
 			y: 15,
 
-			wantScreenState: Screen{
-				pixels: [constants.ScreenWidth][constants.ScreenHeight]bool{31: {15: true}},
-			},
-			want: true,
+			wantScreenState: func() *Screen {
+				state := New()
+				state.pixels[31][15] = true
+
+				return state
+			}(), want: true,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			value := IsSet(&tt.screen, tt.x, tt.y)
+			value := IsSet(tt.screen, tt.x, tt.y)
 
 			assert.Equal(t, tt.wantScreenState, tt.screen)
 			assert.Equal(t, tt.want, value)
@@ -145,92 +164,84 @@ func TestIsSet(t *testing.T) {
 func TestDrawSprite(t *testing.T) {
 	tests := []struct {
 		name   string
-		screen Screen
+		screen *Screen
 		x, y   int
 		sprite []byte
 		size   int
 
-		wantScreenState Screen
+		wantScreenState *Screen
 		wantSpriteState []byte
 		want            bool
 	}{
 		{
 			name:   "Drawing one pixel at first position",
-			screen: Screen{},
+			screen: New(),
 			x:      0,
 			y:      0,
 			sprite: []byte{0x80},
 			size:   1,
 
-			wantScreenState: Screen{
-				pixels: [constants.ScreenWidth][constants.ScreenHeight]bool{
-					{true},
-				},
-			},
+			wantScreenState: func() *Screen {
+				state := New()
+				state.pixels[0][0] = true
+
+				return state
+			}(),
 			wantSpriteState: []byte{0x80},
 			want:            false,
 		},
 		{
 			name: "Drawing one pixel on a previously written pixel",
-			screen: Screen{
-				pixels: [constants.ScreenWidth][constants.ScreenHeight]bool{
-					{true},
-				},
-			},
+			screen: func() *Screen {
+				state := New()
+				state.pixels[0][0] = true
+
+				return state
+			}(),
 			x:      0,
 			y:      0,
 			sprite: []byte{0x80},
 			size:   1,
 
-			wantScreenState: Screen{
-				pixels: [constants.ScreenWidth][constants.ScreenHeight]bool{
-					{false},
-				},
-			},
+			wantScreenState: New(),
 			wantSpriteState: []byte{0x80},
 			want:            true,
 		},
 		{
 			name:   "Drawing two pixels at the horizontal limit of the screen",
-			screen: Screen{},
+			screen: New(),
 			x:      0,
 			y:      31,
 			sprite: []byte{0xC0},
 			size:   1,
 
-			wantScreenState: Screen{
-				pixels: [constants.ScreenWidth][constants.ScreenHeight]bool{
-					0: {31: true},
-					1: {31: true},
-				},
-			},
+			wantScreenState: func() *Screen {
+				state := New()
+				state.pixels[0][31] = true
+				state.pixels[1][31] = true
+
+				return state
+			}(),
 			wantSpriteState: []byte{0xC0},
 			want:            false,
 		},
 		{
 			name:   "Drawing sprite 0 at initial position",
-			screen: Screen{},
+			screen: New(),
 			x:      0,
 			y:      0,
 			sprite: []byte{0xF0, 0x90, 0x90, 0x90, 0xF0},
 			size:   5,
 
-			wantScreenState: Screen{
-				pixels: [constants.ScreenWidth][constants.ScreenHeight]bool{
-					{
-						true, true, true, true, true,
-					},
-					{
-						true, false, false, false, true,
-					},
-					{
-						true, false, false, false, true,
-					},
-					{
-						true, true, true, true, true,
-					},
-				},
-			},
+			wantScreenState: func() *Screen {
+				state := New()
+				copy(state.pixels[0][0:5], []bool{true, true, true, true, true})
+				copy(state.pixels[1][0:5], []bool{true, false, false, false, true})
+				copy(state.pixels[2][0:5], []bool{true, false, false, false, true})
+				copy(state.pixels[3][0:5], []bool{true, true, true, true, true})
+
+				return state
+			}(),
 			wantSpriteState: []byte{0xF0, 0x90, 0x90, 0x90, 0xF0},
 			want:            false,
 		},
@@ -238,7 +249,7 @@ func TestDrawSprite(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			value := DrawSprite(&tt.screen, tt.x, tt.y, tt.sprite, tt.size)
+			value := DrawSprite(tt.screen, tt.x, tt.y, tt.sprite, tt.size)
 
 			assert.Equal(t, tt.wantScreenState, tt.screen)
 			assert.Equal(t, tt.wantSpriteState, tt.sprite)
