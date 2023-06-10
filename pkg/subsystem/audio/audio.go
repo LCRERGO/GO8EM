@@ -44,7 +44,7 @@ type AudioSubsystem struct {
 
 func New(sampleRate int) *AudioSubsystem {
 	if err := sdl.Init(sdl.INIT_AUDIO); err != nil {
-		log.Fatal(err)
+		log.Fatal("new_audio_subsystem:", err)
 	}
 
 	return &AudioSubsystem{
@@ -66,7 +66,7 @@ func Beep(audio AudioSubsystem, frequency, duration int) {
 	}
 
 	if err := sdl.OpenAudio(&spec, nil); err != nil {
-		log.Fatal(err)
+		log.Fatal("beep_audio_subsystem:", err)
 	}
 
 	sdl.PauseAudio(false)

@@ -20,6 +20,6 @@ func DecDT(registers *RegisterFile) {
 	registers.DT--
 }
 
-func DecST(registers *RegisterFile) {
-	registers.ST--
+func ResetST(registers *RegisterFile) {
+	registers.ST = 0
 }
