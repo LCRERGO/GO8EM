@@ -62,30 +62,38 @@ func Destroy(memory *Memory) {
 
 // Set a single byte from a Memory given an index
 // for the position and a value to be set.
-func Set(mem *Memory, index int, val uint8) {
+func Set(memory *Memory, index int, val uint8) {
 	if !isValidIndex(index) {
 		log.Fatal("memory_set: invalid index")
 	}
-	mem.data[index] = val
+	memory.data[index] = val
 }
 
 // Get a single byte from a Memory given an index.
-func Get(mem *Memory, index int) uint8 {
+func Get(memory *Memory, index int) uint8 {
 	if !isValidIndex(index) {
 		log.Fatal("memory_get: invalid index")
 	}
-	return mem.data[index]
+	return memory.data[index]
 }
 
 // Get two bytes from a Memory given a starting index
-func Get16(mem *Memory, index int) uint16 {
+func Get16(memory *Memory, index int) uint16 {
 	if !isValidIndex(index) {
 		log.Fatal("memory_get16: invalid index")
 	}
-	var fstByte uint16 = uint16(Get(mem, index))
-	var sndByte uint16 = uint16(Get(mem, index+1))
+	var fstByte uint16 = uint16(Get(memory, index))
+	var sndByte uint16 = uint16(Get(memory, index+1))
 
 	return fstByte<<8 | sndByte
+}
+
+// Fetch a slice given a starting index and a size
+func Fetch(memory *Memory, index int, size int) []byte {
+	data := make([]byte, size)
+	copy(data, memory.data[index:size+1])
+
+	return data
 }
 
 func isValidIndex(index int) bool {
