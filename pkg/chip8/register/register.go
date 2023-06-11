@@ -1,6 +1,8 @@
 // Package register provides functions for registers manipulation.
 package register
 
+import "github.com/LCRERGO/GO8EM/pkg/constants"
+
 // RegisterFile entity provides access to all the
 // registers available in the emulator.
 type RegisterFile struct {
@@ -14,7 +16,8 @@ type RegisterFile struct {
 // Create a new RegisterFile.
 func New() *RegisterFile {
 	return &RegisterFile{
-		V: make([]uint16, 0x10),
+		V:  make([]uint16, 0x10),
+		PC: constants.ProgramStartAddress,
 	}
 }
 
@@ -40,8 +43,7 @@ func Destroy(registers *RegisterFile) {
 }
 
 // Increments PC register from a RegisterFile
-// to skip next instruction
-func SkipInstruction(registers *RegisterFile) {
+func NextInstruction(registers *RegisterFile) {
 	registers.PC += 2
 }
 

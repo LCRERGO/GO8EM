@@ -3,8 +3,50 @@ package memory
 import (
 	"testing"
 
+	"github.com/LCRERGO/GO8EM/pkg/constants"
 	"github.com/stretchr/testify/assert"
 )
+
+func TestLoadROM(t *testing.T) {
+	tests := []struct {
+		name   string
+		memory *Memory
+		rom    []byte
+		size   uint
+
+		wantMemoryState *Memory
+	}{
+		{
+			name:   "load an empty rom",
+			memory: New(),
+			rom:    []byte{},
+			size:   0,
+
+			wantMemoryState: New(),
+		},
+		{
+			name:   "load a rom of 1 byte",
+			memory: New(),
+			rom:    []byte{0xFF},
+			size:   1,
+
+			wantMemoryState: func() *Memory {
+				baseAddress := uint(constants.ProgramStartAddress)
+				state := New()
+				copy(state.data[baseAddress:baseAddress+1], []byte{0xFF})
+
+				return state
+			}(),
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			LoadROM(tt.memory, tt.rom, tt.size)
+			assert.Equal(t, tt.wantMemoryState, tt.memory)
+		})
+	}
+}
 
 func TestSet(t *testing.T) {
 	tests := []struct {

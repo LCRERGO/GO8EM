@@ -10,6 +10,7 @@ const (
 
 	CharacterSetStartAddress = 0x00
 	DefaultSpriteHeight      = 5
+	ROMMaxSize               = 0xE00
 
 	ClockFrequency = 700
 )

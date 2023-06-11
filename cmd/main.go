@@ -21,6 +21,7 @@ import (
 	"time"
 
 	"github.com/LCRERGO/GO8EM/pkg/chip8"
+	"github.com/LCRERGO/GO8EM/pkg/chip8/handler"
 	"github.com/LCRERGO/GO8EM/pkg/subsystem"
 	"github.com/LCRERGO/GO8EM/pkg/utils/lcg"
 )
@@ -35,11 +36,18 @@ func main() {
 		os.Exit(1)
 	}
 
+	// setup emulator
 	c8 := chip8.New()
 	defer chip8.Destroy(c8)
 	controller := subsystem.New(c8)
 	subsystem.AddROM(controller, os.Args[1])
 	defer subsystem.RemoveROM(controller)
+
+	// setup handlers
+	waitForKeyPress := subsystem.WaitForKeyPress(controller)
+	handlerAggregator := handler.New(waitForKeyPress)
+	defer handler.Destroy(handlerAggregator)
+	chip8.AddHandler(c8, handlerAggregator)
 
 	subsystem.Run(controller)
 }

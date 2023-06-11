@@ -39,9 +39,18 @@ type Memory struct {
 
 // Create a new Memory of size constants.MemorySize.
 func New() *Memory {
+	data := make([]byte, constants.MemorySize)
+	copy(data[0x000:0x1FF], DefaultSprites)
 	return &Memory{
-		data: make([]byte, constants.MemorySize),
+		data: data,
 	}
+}
+
+// Load a rom into Memory at adress 0x200.
+func LoadROM(memory *Memory, rom []byte, size uint) {
+	baseAddress := uint(constants.ProgramStartAddress)
+
+	copy(memory.data[baseAddress:baseAddress+size], rom)
 }
 
 // Deep Copy a Memory.
@@ -77,7 +86,7 @@ func Get(memory *Memory, index int) uint8 {
 	return memory.data[index]
 }
 
-// Get two bytes from a Memory given a starting index
+// Get two bytes from a Memory given a starting index.
 func Get16(memory *Memory, index int) uint16 {
 	if !isValidIndex(index) {
 		log.Fatal("memory_get16: invalid index")
@@ -89,7 +98,7 @@ func Get16(memory *Memory, index int) uint16 {
 }
 
 // Fetch a slice given a starting index and a size
-func Fetch(memory *Memory, index int, size int) []byte {
+func FetchSprite(memory *Memory, index int, size int) []byte {
 	data := make([]byte, size)
 	copy(data, memory.data[index:size+1])
 

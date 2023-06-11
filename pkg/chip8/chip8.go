@@ -2,6 +2,7 @@
 package chip8
 
 import (
+	"github.com/LCRERGO/GO8EM/pkg/chip8/handler"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/keyboard"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/memory"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/register"
@@ -17,6 +18,8 @@ type Chip8 struct {
 	Registers *register.RegisterFile
 	Keyboard  *keyboard.Keyboard
 	Screen    *screen.Screen
+
+	Handler *handler.Handler
 }
 
 // Create a new Chip8
@@ -38,10 +41,12 @@ func Copy(chip8 *Chip8) *Chip8 {
 		Registers: register.Copy(chip8.Registers),
 		Keyboard:  keyboard.Copy(chip8.Keyboard),
 		Screen:    screen.Copy(chip8.Screen),
+
+		Handler: handler.Copy(chip8.Handler),
 	}
 }
 
-// Destroy a Chip8
+// Destroy a Chip8.
 func Destroy(chip8 *Chip8) {
 	screen.Destroy(chip8.Screen)
 	keyboard.Destroy(chip8.Keyboard)
@@ -49,5 +54,20 @@ func Destroy(chip8 *Chip8) {
 	stack.Destroy(chip8.Stack)
 	memory.Destroy(chip8.Memory)
 
+	handler.Destroy(chip8.Handler)
+
 	chip8 = nil
+}
+
+// Fetch an Opcode from Chip8.
+func FetchOpcode(chip8 *Chip8) uint16 {
+	var fstByte uint16 = uint16(memory.Get(chip8.Memory, int(chip8.Registers.PC)))
+	var sndByte uint16 = uint16(memory.Get(chip8.Memory, int(chip8.Registers.PC)+1))
+
+	return fstByte<<8 | sndByte
+}
+
+// Attach a Handler to Chip8.
+func AddHandler(chip8 *Chip8, handler *handler.Handler) {
+	chip8.Handler = handler
 }

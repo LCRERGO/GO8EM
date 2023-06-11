@@ -8,7 +8,7 @@ import (
 type DeviceSubsystem struct {
 	ROMName string
 	Size    uint
-	file    *os.File
+	File    *os.File
 }
 
 func New(fname string) (*DeviceSubsystem, error) {
@@ -20,7 +20,7 @@ func New(fname string) (*DeviceSubsystem, error) {
 	return &DeviceSubsystem{
 		ROMName: fname,
 		Size:    size,
-		file:    file,
+		File:    file,
 	}, nil
 
 err:
@@ -28,7 +28,7 @@ err:
 }
 
 func Destroy(input *DeviceSubsystem) {
-	input.file.Close()
+	input.File.Close()
 	input = nil
 }
 

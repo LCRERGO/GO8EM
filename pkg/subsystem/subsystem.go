@@ -1,12 +1,14 @@
 package subsystem
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"time"
 
 	"github.com/LCRERGO/GO8EM/pkg/chip8"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/keyboard"
+	"github.com/LCRERGO/GO8EM/pkg/chip8/memory"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/register"
 	"github.com/LCRERGO/GO8EM/pkg/constants"
 	"github.com/LCRERGO/GO8EM/pkg/subsystem/audio"
@@ -44,6 +46,7 @@ func AddROM(controller *SubsystemController, fname string) error {
 		return err
 	}
 	controller.inputDevice = device
+	loadROM2Memory(controller)
 
 	return nil
 }
@@ -51,6 +54,34 @@ func AddROM(controller *SubsystemController, fname string) error {
 func RemoveROM(controller *SubsystemController) {
 	if controller.inputDevice != nil {
 		device.Destroy(controller.inputDevice)
+	}
+}
+
+func WaitForKeyPress(controller *SubsystemController) func() (int, error) {
+	return func() (int, error) {
+		if controller != nil {
+			var event sdl.Event
+
+			for event = sdl.WaitEvent(); event != nil; event = sdl.WaitEvent() {
+				switch t := event.(type) {
+				case *sdl.KeyboardEvent:
+					if t.Type == sdl.KEYDOWN {
+						keySymbol := t.Keysym.Sym
+						repr, err := keyboard_map.GetKeyRepr(keySymbol)
+						if err != nil {
+							log.Printf("wait_for_key_press: %v", err)
+						}
+						return repr, nil
+					}
+
+				default:
+					// NOOP
+					continue
+				}
+			}
+		}
+
+		return 0xFF, fmt.Errorf("wait_for_key_press: impossible branch")
 	}
 }
 
@@ -70,6 +101,18 @@ func step(controller *SubsystemController) {
 	}
 }
 
+func loadROM2Memory(controller *SubsystemController) {
+	if controller.inputDevice != nil {
+		rom := make([]byte, constants.ROMMaxSize)
+		_, err := controller.inputDevice.File.Read(rom)
+		if err != nil {
+			log.Fatalf("load_rom_2_memory: %v", err)
+		}
+
+		memory.LoadROM(controller.chip8.Memory, rom, controller.inputDevice.Size)
+	}
+}
+
 func handleEvents(controller *SubsystemController) {
 	var event sdl.Event
 
@@ -83,7 +126,7 @@ func handleEvents(controller *SubsystemController) {
 			keySymbol := t.Keysym.Sym
 			repr, err := keyboard_map.GetKeyRepr(keySymbol)
 			if err != nil {
-				log.Printf("handle_key_up: %v", err)
+				log.Printf("handle_events: %v", err)
 			}
 
 			if t.Type == sdl.KEYDOWN {
@@ -93,6 +136,7 @@ func handleEvents(controller *SubsystemController) {
 			}
 		default:
 			// NOOP
+			continue
 		}
 	}
 }

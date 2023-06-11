@@ -16,6 +16,14 @@ func byte2Short(dataSlice []byte) uint16 {
 	return uint16(dataSlice[1])<<8 + uint16(dataSlice[0])
 }
 
+func Byte2BCD(value byte) (units, tens, hundreds uint8) {
+	hundreds = value / 100
+	tens = value / 100
+	units = value / 100
+
+	return
+}
+
 func Num2Bin[T constraints.Integer](n T) string {
 	var str string
 	size := unsafe.Sizeof(n) * 8
