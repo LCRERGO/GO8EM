@@ -109,7 +109,7 @@ func handleDelayTimer(controller *SubsystemController) {
 func handleSoundTimer(controller *SubsystemController) {
 	if controller.chip8.Registers.ST > 0 {
 		audio.Beep(*controller.audio,
-			15000,
+			12500,
 			100*int(controller.chip8.Registers.ST))
 		register.ResetST(controller.chip8.Registers)
 		log.Printf("sound: %v", controller.chip8.Registers.ST)
