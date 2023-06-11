@@ -2,6 +2,7 @@
 package chip8
 
 import (
+	"github.com/LCRERGO/GO8EM/pkg/chip8/keyboard"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/memory"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/register"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/screen"
@@ -14,6 +15,7 @@ type Chip8 struct {
 	Memory    *memory.Memory
 	Stack     *stack.Stack
 	Registers *register.RegisterFile
+	Keyboard  *keyboard.Keyboard
 	Screen    *screen.Screen
 }
 
@@ -23,6 +25,7 @@ func New() *Chip8 {
 		Memory:    memory.New(),
 		Stack:     stack.New(),
 		Registers: register.New(),
+		Keyboard:  keyboard.New(),
 		Screen:    screen.New(),
 	}
 }
@@ -33,6 +36,7 @@ func Copy(chip8 *Chip8) *Chip8 {
 		Memory:    memory.Copy(chip8.Memory),
 		Stack:     stack.Copy(chip8.Stack),
 		Registers: register.Copy(chip8.Registers),
+		Keyboard:  keyboard.Copy(chip8.Keyboard),
 		Screen:    screen.Copy(chip8.Screen),
 	}
 }
@@ -40,6 +44,7 @@ func Copy(chip8 *Chip8) *Chip8 {
 // Destroy a Chip8
 func Destroy(chip8 *Chip8) {
 	screen.Destroy(chip8.Screen)
+	keyboard.Destroy(chip8.Keyboard)
 	register.Destroy(chip8.Registers)
 	stack.Destroy(chip8.Stack)
 	memory.Destroy(chip8.Memory)

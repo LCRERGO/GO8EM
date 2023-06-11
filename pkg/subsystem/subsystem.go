@@ -6,29 +6,28 @@ import (
 	"time"
 
 	"github.com/LCRERGO/GO8EM/pkg/chip8"
+	"github.com/LCRERGO/GO8EM/pkg/chip8/keyboard"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/register"
 	"github.com/LCRERGO/GO8EM/pkg/constants"
 	"github.com/LCRERGO/GO8EM/pkg/subsystem/audio"
 	"github.com/LCRERGO/GO8EM/pkg/subsystem/input/device"
-	"github.com/LCRERGO/GO8EM/pkg/subsystem/input/keyboard"
+	keyboard_map "github.com/LCRERGO/GO8EM/pkg/subsystem/input/keyboard"
 	"github.com/LCRERGO/GO8EM/pkg/subsystem/video"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
 type SubsystemController struct {
-	inputDevice   *device.DeviceSubsystem
-	inputKeyboard *keyboard.KeyboardSubsystem
-	audio         *audio.AudioSubsystem
-	video         *video.VideoSubsystem
+	inputDevice *device.DeviceSubsystem
+	audio       *audio.AudioSubsystem
+	video       *video.VideoSubsystem
 
 	chip8 *chip8.Chip8
 }
 
 func New(chip8 *chip8.Chip8) *SubsystemController {
 	return &SubsystemController{
-		inputKeyboard: keyboard.New(),
-		audio:         audio.New(44100),
-		video:         video.New(),
+		audio: audio.New(44100),
+		video: video.New(),
 
 		chip8: chip8,
 	}
@@ -37,7 +36,6 @@ func New(chip8 *chip8.Chip8) *SubsystemController {
 func Destroy(controller *SubsystemController) {
 	video.Destroy(controller.video)
 	audio.Destroy(controller.audio)
-	keyboard.Destroy(controller.inputKeyboard)
 }
 
 func AddROM(controller *SubsystemController, fname string) error {
@@ -83,15 +81,15 @@ func handleEvents(controller *SubsystemController) {
 			os.Exit(0)
 		case *sdl.KeyboardEvent:
 			keySymbol := t.Keysym.Sym
-			repr, err := keyboard.GetKeyRepr(controller.inputKeyboard, keySymbol)
+			repr, err := keyboard_map.GetKeyRepr(keySymbol)
 			if err != nil {
 				log.Printf("handle_key_up: %v", err)
 			}
 
 			if t.Type == sdl.KEYDOWN {
-				keyboard.KeyDown(controller.inputKeyboard, repr)
+				keyboard.SetKeyDown(controller.chip8.Keyboard, repr)
 			} else if t.Type == sdl.KEYUP {
-				keyboard.KeyUp(controller.inputKeyboard, repr)
+				keyboard.SetKeyUp(controller.chip8.Keyboard, repr)
 			}
 		default:
 			// NOOP

@@ -25,38 +25,7 @@ var subsystemMap map[sdl.Keycode]int = map[sdl.Keycode]int{
 	sdl.SCANCODE_F: 0x0F,
 }
 
-type KeyboardSubsystem struct {
-	keyState map[int]bool
-}
-
-func New() *KeyboardSubsystem {
-	return &KeyboardSubsystem{
-		keyState: map[int]bool{
-			0x00: false,
-			0x01: false,
-			0x02: false,
-			0x03: false,
-			0x04: false,
-			0x05: false,
-			0x06: false,
-			0x07: false,
-			0x08: false,
-			0x09: false,
-			0x0A: false,
-			0x0B: false,
-			0x0C: false,
-			0x0D: false,
-			0x0E: false,
-			0x0F: false,
-		},
-	}
-}
-
-func Destroy(keyboard *KeyboardSubsystem) {
-	keyboard = nil
-}
-
-func GetKeyRepr(keyboard *KeyboardSubsystem, keySymbol sdl.Keycode) (int, error) {
+func GetKeyRepr(keySymbol sdl.Keycode) (int, error) {
 	for k, v := range subsystemMap {
 		if k == keySymbol {
 			return v, nil
@@ -64,16 +33,4 @@ func GetKeyRepr(keyboard *KeyboardSubsystem, keySymbol sdl.Keycode) (int, error)
 	}
 
 	return 0xFF, fmt.Errorf("keyboard: invalid key")
-}
-
-func KeyStatus(keyboard *KeyboardSubsystem, key int) bool {
-	return keyboard.keyState[key]
-}
-
-func KeyDown(keyboard *KeyboardSubsystem, key int) {
-	keyboard.keyState[key] = true
-}
-
-func KeyUp(keyboard *KeyboardSubsystem, key int) {
-	keyboard.keyState[key] = false
 }
