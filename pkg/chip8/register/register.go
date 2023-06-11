@@ -39,6 +39,12 @@ func Destroy(registers *RegisterFile) {
 	registers = nil
 }
 
+// Increments PC register from a RegisterFile
+// to skip next instruction
+func SkipInstruction(registers *RegisterFile) {
+	registers.PC += 2
+}
+
 // Decrement the DT register from a RegisterFile.
 func DecDT(registers *RegisterFile) {
 	registers.DT--
