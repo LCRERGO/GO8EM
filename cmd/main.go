@@ -18,10 +18,16 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/LCRERGO/GO8EM/pkg/chip8"
 	"github.com/LCRERGO/GO8EM/pkg/subsystem"
+	"github.com/LCRERGO/GO8EM/pkg/utils/lcg"
 )
+
+func init() {
+	lcg.SeedLCG(int(time.Now().UnixNano()))
+}
 
 func main() {
 	if len(os.Args) < 2 {
