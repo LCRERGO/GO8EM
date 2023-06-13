@@ -95,8 +95,16 @@ var instructionMap []Instruction = []Instruction{
 	{"LDVXI", "Fx65 - LD Vx, [I]", instr35.Exec},
 }
 
+// Decode an opcode into it's arguments and an instruction.
+func Decode(opcode uint16) (Instruction, *argument.OpcodeArguments) {
+	instruction := parseInstruction(opcode)
+	args := argument.ParseArguments(opcode)
+
+	return instruction, args
+}
+
 // Parse an Instruction given an opcode.
-func ParseInstruction(opcode uint16) Instruction {
+func parseInstruction(opcode uint16) Instruction {
 	var instruction Instruction
 	parts := opcode_part.ParseOpcodeParts(opcode)
 
