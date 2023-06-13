@@ -1,4 +1,4 @@
-// Package of chip8 general purpose interface
+// Package of chip8 general purpose interface.
 package chip8
 
 import (
