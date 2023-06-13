@@ -87,3 +87,22 @@ func DrawSprite(screen *Screen, x, y int, sprite []byte, size int) bool {
 
 	return pixelCollision
 }
+
+// ToString returns the string representation of a Screen.
+func ToString(screen *Screen) string {
+	var str string
+
+	for x := range screen.pixels {
+		str += "\n"
+		for y := range screen.pixels {
+			if screen.pixels[x][y] {
+				str += "█ "
+			} else {
+				// screen.pixels[x][y]
+				str += "_ "
+			}
+		}
+	}
+
+	return str
+}

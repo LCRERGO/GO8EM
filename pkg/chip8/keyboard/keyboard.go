@@ -1,7 +1,10 @@
 // Package memory provides functions for keyboard map manipulation.
 package keyboard
 
-import "log"
+import (
+	"fmt"
+	"log"
+)
 
 type Keyboard struct {
 	data map[int]bool
@@ -52,7 +55,7 @@ func Destroy(keyboard *Keyboard) {
 // Get Key current state from a Keyboard.
 func KeyStatus(keyboard *Keyboard, key int) bool {
 	if !isValidKey(keyboard, key) {
-		log.Fatal("keyboard: invalid key")
+		log.Print("keyboard_key_status: invalid key")
 	}
 	return keyboard.data[key]
 }
@@ -70,7 +73,7 @@ func IsDown(keyboard *Keyboard, key int) bool {
 // Set Key down in a Keyboard.
 func SetKeyDown(keyboard *Keyboard, key int) {
 	if !isValidKey(keyboard, key) {
-		log.Fatal("keyboard: invalid key")
+		log.Print("keyboard_set_key_down: invalid key")
 	}
 	keyboard.data[key] = true
 }
@@ -78,9 +81,27 @@ func SetKeyDown(keyboard *Keyboard, key int) {
 // Set Key up in a Keyboard.
 func SetKeyUp(keyboard *Keyboard, key int) {
 	if !isValidKey(keyboard, key) {
-		log.Fatal("keyboard: invalid key")
+		log.Print("keyboard_set_key_up: invalid key")
 	}
 	keyboard.data[key] = false
+}
+
+// ToString returns the string representation of a Keyboard.
+func ToString(keyboard *Keyboard) string {
+	var str string
+
+	str += "\n{"
+	for k, v := range keyboard.data {
+		str += fmt.Sprintf("\n\t%01X: ", k)
+		if v {
+			str += fmt.Sprintf("%1d", 1)
+		} else {
+			str += fmt.Sprintf("%1d", 0)
+		}
+	}
+	str += "}"
+
+	return str
 }
 
 func isValidKey(keyboard *Keyboard, key int) bool {

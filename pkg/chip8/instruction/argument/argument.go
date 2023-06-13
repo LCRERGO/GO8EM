@@ -1,6 +1,8 @@
 // Package of instruction argument types.
 package argument
 
+import "fmt"
+
 // Agregate the arguments of an opcode, which may be in the form:
 // nnn or addr - A 12-bit value, the lowest 12 bits of the instruction
 // n or nibble - A 4-bit value, the lowest 4 bits of the instruction
@@ -23,4 +25,17 @@ func ParseArguments(opcode uint16) *OpcodeArguments {
 		Y:   uint8((opcode >> 4) & 0x000F),
 		KK:  uint8(opcode & 0x00FF),
 	}
+}
+
+func ToString(args *OpcodeArguments) string {
+	return fmt.Sprintf(`
+	{
+		NNN: 0x%03X
+		N: 0x%01X
+		X: 0x%01X, Y: 0x%01X
+		KK: 0x%02X
+	}
+	`, args.NNN, args.N,
+		args.X, args.Y,
+		args.KK)
 }

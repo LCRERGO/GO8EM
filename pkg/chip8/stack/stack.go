@@ -2,6 +2,7 @@
 package stack
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/LCRERGO/GO8EM/pkg/chip8/register"
@@ -61,6 +62,17 @@ func Pop(stack *Stack, registers *register.RegisterFile) uint16 {
 	registers.SP--
 
 	return address
+}
+
+// ToString returns the string representation of a Stack.
+func ToString(stack *Stack) string {
+	var str string
+
+	for i, v := range stack.data {
+		str += fmt.Sprintf("0x%02X: 0x%04X\n", i, v)
+	}
+
+	return str
 }
 
 func isValidSP(sp uint16) bool {

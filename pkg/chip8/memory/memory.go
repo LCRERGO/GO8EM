@@ -2,6 +2,7 @@
 package memory
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/LCRERGO/GO8EM/pkg/constants"
@@ -103,6 +104,19 @@ func FetchSprite(memory *Memory, index int, size int) []byte {
 	copy(data, memory.data[index:size+1])
 
 	return data
+}
+
+// ToString returns the string representation of a Memory.
+func ToString(memory *Memory) string {
+	var str string
+	for i, v := range memory.data {
+		if i%0x10 == 0 {
+			str += "\n"
+		}
+		str += fmt.Sprintf("%02X ", v)
+	}
+
+	return str
 }
 
 func isValidIndex(index int) bool {

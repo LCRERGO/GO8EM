@@ -2,6 +2,8 @@
 package chip8
 
 import (
+	"fmt"
+
 	"github.com/LCRERGO/GO8EM/pkg/chip8/handler"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/keyboard"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/memory"
@@ -70,4 +72,21 @@ func FetchOpcode(chip8 *Chip8) uint16 {
 // Attach a Handler to Chip8.
 func AddHandler(chip8 *Chip8, handler *handler.Handler) {
 	chip8.Handler = handler
+}
+
+// ToString returns the string representation of Chip8.
+func ToString(chip8 *Chip8) string {
+	return fmt.Sprintf(`
+	{
+		Memroy: %v
+		Stack: %v
+		Registers: %v
+		Keyboard: %v
+	}
+	`,
+		memory.ToString(chip8.Memory),
+		stack.ToString(chip8.Stack),
+		register.ToString(chip8.Registers),
+		keyboard.ToString(chip8.Keyboard),
+	)
 }
