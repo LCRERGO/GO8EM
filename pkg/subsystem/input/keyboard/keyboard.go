@@ -6,7 +6,7 @@ import (
 	"github.com/veandco/go-sdl2/sdl"
 )
 
-var subsystemMap map[sdl.Keycode]int = map[sdl.Keycode]int{
+var subsystemMap map[sdl.Scancode]int = map[sdl.Scancode]int{
 	sdl.SCANCODE_0: 0x00,
 	sdl.SCANCODE_1: 0x01,
 	sdl.SCANCODE_2: 0x02,
@@ -27,7 +27,7 @@ var subsystemMap map[sdl.Keycode]int = map[sdl.Keycode]int{
 
 func GetKeyRepr(keySymbol sdl.Keycode) (int, error) {
 	for k, v := range subsystemMap {
-		if k == keySymbol {
+		if sdl.GetKeyFromScancode(k) == keySymbol {
 			return v, nil
 		}
 	}
