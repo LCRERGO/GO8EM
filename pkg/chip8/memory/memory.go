@@ -101,7 +101,7 @@ func Get16(memory *Memory, index int) uint16 {
 // Fetch a slice given a starting index and a size
 func FetchSprite(memory *Memory, index int, size int) []byte {
 	data := make([]byte, size)
-	copy(data, memory.data[index:size+1])
+	copy(data, memory.data[index:index+size+1])
 
 	return data
 }
