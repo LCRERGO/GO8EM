@@ -2,6 +2,8 @@
 package instruction
 
 import (
+	"fmt"
+
 	"github.com/LCRERGO/GO8EM/pkg/chip8"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/instruction/argument"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/instruction/instr00"
@@ -93,6 +95,12 @@ var instructionMap []Instruction = []Instruction{
 	{"LDBVX", "Fx33 - LD B, Vx", instr33.Exec},
 	{"LDIVX", "Fx55 - LD [I], Vx", instr34.Exec},
 	{"LDVXI", "Fx65 - LD Vx, [I]", instr35.Exec},
+}
+
+func ToString(instruction *Instruction) string {
+	return fmt.Sprintf("Tag: %q\nRepr: %q",
+		instruction.Tag,
+		instruction.Repr)
 }
 
 // Decode an opcode into it's arguments and an instruction.

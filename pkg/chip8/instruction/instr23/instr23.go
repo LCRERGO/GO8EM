@@ -10,5 +10,5 @@ import (
 // Set Vx = random byte AND kk.
 func Exec(state *chip8.Chip8, args *argument.OpcodeArguments) {
 	state.Registers.V[args.X] =
-		uint16((lcg.LCG() & int(args.KK)) & 0xFF)
+		uint16((lcg.RandInt(state.RandGen) & int(args.KK)) & 0xFF)
 }

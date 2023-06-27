@@ -26,8 +26,10 @@ import (
 	"github.com/LCRERGO/GO8EM/pkg/utils/lcg"
 )
 
+var randGen *lcg.LCG
+
 func init() {
-	lcg.SeedLCG(int(time.Now().UnixNano()))
+	randGen = lcg.New(int(time.Now().UnixNano()))
 }
 
 func main() {
@@ -39,6 +41,7 @@ func main() {
 	// setup emulator
 	c8 := chip8.New()
 	defer chip8.Destroy(c8)
+	chip8.AddRandGen(c8, randGen)
 	controller := subsystem.New(c8)
 	subsystem.AddROM(controller, os.Args[1])
 	defer subsystem.RemoveROM(controller)

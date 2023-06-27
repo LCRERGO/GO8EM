@@ -10,6 +10,7 @@ import (
 	"github.com/LCRERGO/GO8EM/pkg/chip8/register"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/screen"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/stack"
+	"github.com/LCRERGO/GO8EM/pkg/utils/lcg"
 )
 
 // Chip8 entity is the logical representation of
@@ -21,10 +22,11 @@ type Chip8 struct {
 	Keyboard  *keyboard.Keyboard
 	Screen    *screen.Screen
 
+	RandGen *lcg.LCG
 	Handler *handler.Handler
 }
 
-// Create a new Chip8
+// Create a new Chip8.
 func New() *Chip8 {
 	return &Chip8{
 		Memory:    memory.New(),
@@ -74,19 +76,27 @@ func AddHandler(chip8 *Chip8, handler *handler.Handler) {
 	chip8.Handler = handler
 }
 
+// Attach a random generator to Chip8.
+func AddRandGen(chip8 *Chip8, lcg *lcg.LCG) {
+	chip8.RandGen = lcg
+}
+
 // ToString returns the string representation of Chip8.
 func ToString(chip8 *Chip8) string {
 	return fmt.Sprintf(`
 	{
-		Memroy: %v
+		Memory: %v
 		Stack: %v
 		Registers: %v
 		Keyboard: %v
+
+		Screen: %v
 	}
 	`,
 		memory.ToString(chip8.Memory),
 		stack.ToString(chip8.Stack),
 		register.ToString(chip8.Registers),
 		keyboard.ToString(chip8.Keyboard),
+		screen.ToString(chip8.Screen),
 	)
 }

@@ -18,8 +18,8 @@ func byte2Short(dataSlice []byte) uint16 {
 
 func Byte2BCD(value byte) (units, tens, hundreds uint8) {
 	hundreds = value / 100
-	tens = value / 100
-	units = value / 100
+	tens = (value / 10) - (hundreds * 10)
+	units = value - (hundreds*100 + tens*10)
 
 	return
 }

@@ -1,7 +1,9 @@
 // Package screen provides functions for screen manipulation.
 package screen
 
-import "github.com/LCRERGO/GO8EM/pkg/constants"
+import (
+	"github.com/LCRERGO/GO8EM/pkg/constants"
+)
 
 // Screen entity is the logical representation of the pixels
 // in the emulator.
@@ -92,10 +94,10 @@ func DrawSprite(screen *Screen, x, y int, sprite []byte, size int) bool {
 func ToString(screen *Screen) string {
 	var str string
 
-	for x := range screen.pixels {
+	for x := 0; x < constants.ScreenHeight; x++ {
 		str += "\n"
-		for y := range screen.pixels {
-			if screen.pixels[x][y] {
+		for y := 0; y < constants.ScreenWidth; y++ {
+			if screen.pixels[y][x] {
 				str += "█ "
 			} else {
 				// screen.pixels[x][y]

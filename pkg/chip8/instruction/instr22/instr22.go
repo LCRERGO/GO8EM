@@ -8,5 +8,5 @@ import (
 // Bnnn - JP V0, addr
 // Jump to location nnn + V0.
 func Exec(state *chip8.Chip8, args *argument.OpcodeArguments) {
-	state.Registers.PC = args.NNN + state.Registers.V[0x00]
+	state.Registers.PC = (args.NNN + state.Registers.V[0x00]) & 0xFFF
 }

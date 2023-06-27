@@ -62,12 +62,12 @@ func KeyStatus(keyboard *Keyboard, key int) bool {
 
 // Check if a key on a Keyboard is up.
 func IsUp(keyboard *Keyboard, key int) bool {
-	return KeyStatus(keyboard, key)
+	return !KeyStatus(keyboard, key)
 }
 
 // Check if a key on a Keyboard is down.
 func IsDown(keyboard *Keyboard, key int) bool {
-	return !KeyStatus(keyboard, key)
+	return KeyStatus(keyboard, key)
 }
 
 // Set Key down in a Keyboard.
@@ -99,7 +99,7 @@ func ToString(keyboard *Keyboard) string {
 			str += fmt.Sprintf("%1d", 0)
 		}
 	}
-	str += "}"
+	str += "\n}"
 
 	return str
 }
