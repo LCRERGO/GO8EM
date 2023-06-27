@@ -1,5 +1,6 @@
 VERSION = 1.0.0
 
+BINNAME = go8em
 BUILDDIR = build
 GOCMD = env go
 GOENVS = GOOS=js GOARCH=wasm
@@ -8,7 +9,7 @@ all: main
 
 main:
 	mkdir -p $(BUILDDIR)
-	$(GOCMD) build -o $(BUILDDIR)/main-$(VERSION) cmd/main.go
+	$(GOCMD) build -o $(BUILDDIR)/$(BINNAME) cmd/main.go
 
 check:
 	$(GOCMD) test ./...
