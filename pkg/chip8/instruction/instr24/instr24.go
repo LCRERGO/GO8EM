@@ -5,6 +5,7 @@ import (
 	"github.com/LCRERGO/GO8EM/pkg/chip8"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/instruction/argument"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/memory"
+	"github.com/LCRERGO/GO8EM/pkg/chip8/register"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/screen"
 )
 
@@ -21,5 +22,5 @@ func Exec(state *chip8.Chip8, args *argument.OpcodeArguments) {
 	} else {
 		state.Registers.V[0x0F] = 0x00
 	}
-
+	register.NextInstruction(state.Registers)
 }

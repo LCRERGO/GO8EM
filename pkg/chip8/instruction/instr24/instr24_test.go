@@ -31,6 +31,7 @@ func TestExec(t *testing.T) {
 			wantChip8State: func() *chip8.Chip8 {
 				state := chip8.New()
 				state.Registers.I = 0x400
+				state.Registers.PC += 2
 
 				return state
 			}(),
@@ -51,6 +52,7 @@ func TestExec(t *testing.T) {
 				state.Registers.I = 0x400
 				memory.Set(state.Memory, 0x400, 0x80)
 				screen.Set(state.Screen, 0, 0)
+				state.Registers.PC += 2
 
 				return state
 			}(),
@@ -71,6 +73,7 @@ func TestExec(t *testing.T) {
 				state.Registers.I = 0x400
 				memory.Set(state.Memory, 0x400, 0xFF)
 				screen.DrawSprite(state.Screen, 0, 0, []byte{0xFF}, 1)
+				state.Registers.PC += 2
 
 				return state
 			}(),
@@ -91,6 +94,7 @@ func TestExec(t *testing.T) {
 				state.Registers.I = 0x400
 				memory.Set(state.Memory, 0x400, 0x0F)
 				screen.DrawSprite(state.Screen, 0, 0, []byte{0x0F}, 1)
+				state.Registers.PC += 2
 
 				return state
 			}(),

@@ -1,3 +1,4 @@
+// SDL controller subsystem.
 package subsystem
 
 import (
@@ -7,6 +8,7 @@ import (
 	"time"
 
 	"github.com/LCRERGO/GO8EM/pkg/chip8"
+	"github.com/LCRERGO/GO8EM/pkg/chip8/instruction"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/keyboard"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/memory"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/register"
@@ -98,6 +100,10 @@ func step(controller *SubsystemController) {
 		video.Render(controller.video, controller.chip8.Screen)
 		handleDelayTimer(controller)
 		handleSoundTimer(controller)
+
+		opcode := chip8.FetchOpcode(controller.chip8)
+		instr, args := instruction.Decode(opcode)
+		instr.ExecFunc(controller.chip8, args)
 	}
 }
 
@@ -142,12 +148,10 @@ func handleEvents(controller *SubsystemController) {
 }
 
 func handleDelayTimer(controller *SubsystemController) {
-	if controller.chip8.Registers.DT > 0 {
-		time.Sleep(1500 * time.Microsecond)
+	for controller.chip8.Registers.DT > 0 {
+		time.Sleep(constants.ClockFrequency * time.Microsecond)
 		register.DecDT(controller.chip8.Registers)
-		log.Printf("delay: %v", controller.chip8.Registers.DT)
 	}
-
 }
 
 func handleSoundTimer(controller *SubsystemController) {
@@ -156,6 +160,5 @@ func handleSoundTimer(controller *SubsystemController) {
 			12500,
 			100*int(controller.chip8.Registers.ST))
 		register.ResetST(controller.chip8.Registers)
-		log.Printf("sound: %v", controller.chip8.Registers.ST)
 	}
 }

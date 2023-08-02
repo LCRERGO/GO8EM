@@ -35,6 +35,7 @@ func TestExec(t *testing.T) {
 				state := chip8.New()
 				randGen := lcg.New(0x0B)
 				chip8.AddRandGen(state, randGen)
+				state.Registers.PC += 2
 
 				return state
 			}(),
@@ -56,6 +57,7 @@ func TestExec(t *testing.T) {
 				randGen := lcg.New(0x0B)
 				chip8.AddRandGen(state, randGen)
 				state.Registers.V[0x1] = 0x0B
+				state.Registers.PC += 2
 
 				return state
 			}(),
@@ -76,6 +78,7 @@ func TestExec(t *testing.T) {
 				state := chip8.New()
 				randGen := lcg.New(0x5D90DF9869E)
 				chip8.AddRandGen(state, randGen)
+				state.Registers.PC += 2
 
 				return state
 			}(),
@@ -97,6 +100,7 @@ func TestExec(t *testing.T) {
 				randGen := lcg.New(0x5D90DF9869E)
 				chip8.AddRandGen(state, randGen)
 				state.Registers.V[0x1] = 0x9E
+				state.Registers.PC += 2
 
 				return state
 			}(),

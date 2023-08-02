@@ -13,4 +13,5 @@ func Exec(state *chip8.Chip8, args *argument.OpcodeArguments) {
 	if state.Registers.V[args.X] != uint16(args.KK) {
 		register.NextInstruction(state.Registers)
 	}
+	register.NextInstruction(state.Registers)
 }

@@ -21,7 +21,12 @@ func TestExec(t *testing.T) {
 			chip8: chip8.New(),
 			args:  argument.ParseArguments(0x6100),
 
-			wantChip8State: chip8.New(),
+			wantChip8State: func() *chip8.Chip8 {
+				state := chip8.New()
+				state.Registers.PC += 2
+
+				return state
+			}(),
 		},
 		{
 			name:  "load last byte",
@@ -31,6 +36,7 @@ func TestExec(t *testing.T) {
 			wantChip8State: func() *chip8.Chip8 {
 				state := chip8.New()
 				state.Registers.V[0x1] = 0xFF
+				state.Registers.PC += 2
 
 				return state
 			}(),
@@ -43,6 +49,7 @@ func TestExec(t *testing.T) {
 			wantChip8State: func() *chip8.Chip8 {
 				state := chip8.New()
 				state.Registers.V[0x1] = 0x0F
+				state.Registers.PC += 2
 
 				return state
 			}(),

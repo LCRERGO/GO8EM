@@ -5,6 +5,7 @@ import (
 	"github.com/LCRERGO/GO8EM/pkg/chip8"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/instruction/argument"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/memory"
+	"github.com/LCRERGO/GO8EM/pkg/chip8/register"
 )
 
 // Fx55 - LD [I], Vx
@@ -15,4 +16,5 @@ func Exec(state *chip8.Chip8, args *argument.OpcodeArguments) {
 			int(state.Registers.I)+i,
 			uint8(state.Registers.V[i]))
 	}
+	register.NextInstruction(state.Registers)
 }

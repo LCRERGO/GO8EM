@@ -30,6 +30,7 @@ func TestExec(t *testing.T) {
 				state := chip8.New()
 				state.Registers.I = 0x000
 				state.Registers.V[0x1] = 0x00
+				state.Registers.PC += 2
 
 				return state
 			}(),
@@ -48,6 +49,7 @@ func TestExec(t *testing.T) {
 				state := chip8.New()
 				state.Registers.I = 0x4B
 				state.Registers.V[0x1] = 0xF
+				state.Registers.PC += 2
 
 				return state
 			}(),
@@ -67,6 +69,7 @@ func TestExec(t *testing.T) {
 				state := chip8.New()
 				state.Registers.I = 0x23
 				state.Registers.V[0x1] = 0x7
+				state.Registers.PC += 2
 
 				return state
 			}(),

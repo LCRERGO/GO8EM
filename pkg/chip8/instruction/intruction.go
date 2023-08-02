@@ -52,9 +52,9 @@ type ExecInstruction func(*chip8.Chip8, *argument.OpcodeArguments)
 // assembly form, and it's ExecFunc which is what operation
 // should be performed when the instruction is encountered.
 type Instruction struct {
-	Tag      string
-	Repr     string
-	ExecFunc ExecInstruction
+	Tag      string          // Tag (identifier)
+	Repr     string          // Generic Representation
+	ExecFunc ExecInstruction // Function to be executed
 }
 
 // A mapper of Instructions.

@@ -6,6 +6,7 @@ import (
 
 	"github.com/LCRERGO/GO8EM/pkg/chip8"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/instruction/argument"
+	"github.com/LCRERGO/GO8EM/pkg/chip8/register"
 )
 
 // Fx0A - LD Vx, K
@@ -16,4 +17,5 @@ func Exec(state *chip8.Chip8, args *argument.OpcodeArguments) {
 		log.Fatal("exec_instr28: wait_for_key_press")
 	}
 	state.Registers.V[args.X] = uint16(key)
+	register.NextInstruction(state.Registers)
 }

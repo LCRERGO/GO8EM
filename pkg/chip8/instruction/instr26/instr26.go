@@ -15,4 +15,5 @@ func Exec(state *chip8.Chip8, args *argument.OpcodeArguments) {
 	if keyboard.IsUp(state.Keyboard, int(key)) {
 		register.NextInstruction(state.Registers)
 	}
+	register.NextInstruction(state.Registers)
 }

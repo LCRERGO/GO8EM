@@ -6,7 +6,6 @@ import (
 	"github.com/LCRERGO/GO8EM/pkg/chip8"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/instruction/argument"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/keyboard"
-	"github.com/LCRERGO/GO8EM/pkg/chip8/register"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -33,6 +32,7 @@ func TestExec(t *testing.T) {
 				state := chip8.New()
 				key := state.Registers.V[0x1]
 				keyboard.SetKeyDown(state.Keyboard, int(key))
+				state.Registers.PC += 2
 
 				return state
 			}(),
@@ -44,7 +44,7 @@ func TestExec(t *testing.T) {
 
 			wantChip8State: func() *chip8.Chip8 {
 				state := chip8.New()
-				register.NextInstruction(state.Registers)
+				state.Registers.PC += 4
 
 				return state
 			}(),

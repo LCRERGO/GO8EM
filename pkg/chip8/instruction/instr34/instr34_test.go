@@ -35,6 +35,7 @@ func TestExec(t *testing.T) {
 				memory.Set(state.Memory,
 					int(state.Registers.I),
 					uint8(state.Registers.V[0x0]))
+				state.Registers.PC += 2
 
 				return state
 			}(),
@@ -59,6 +60,7 @@ func TestExec(t *testing.T) {
 					state.Registers.V[i] = uint16(i)
 					memory.Set(state.Memory, 0x400+i, uint8(i))
 				}
+				state.Registers.PC += 2
 
 				return state
 			}(),
@@ -84,6 +86,7 @@ func TestExec(t *testing.T) {
 					state.Registers.V[i] = uint16(i)
 					memory.Set(state.Memory, 0x400+i, uint8(i))
 				}
+				state.Registers.PC += 2
 
 				return state
 			}(),

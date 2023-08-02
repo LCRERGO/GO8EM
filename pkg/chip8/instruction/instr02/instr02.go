@@ -4,6 +4,7 @@ package instr02
 import (
 	"github.com/LCRERGO/GO8EM/pkg/chip8"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/instruction/argument"
+	"github.com/LCRERGO/GO8EM/pkg/chip8/register"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/screen"
 )
 
@@ -11,4 +12,5 @@ import (
 // Clear the display.
 func Exec(state *chip8.Chip8, args *argument.OpcodeArguments) {
 	screen.Clear(state.Screen)
+	register.NextInstruction(state.Registers)
 }

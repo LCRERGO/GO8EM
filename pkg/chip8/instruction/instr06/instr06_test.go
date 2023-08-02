@@ -23,7 +23,7 @@ func TestExec(t *testing.T) {
 
 			wantChip8State: func() *chip8.Chip8 {
 				state := chip8.New()
-				state.Registers.PC += 2
+				state.Registers.PC += 4
 
 				return state
 			}(),
@@ -41,6 +41,7 @@ func TestExec(t *testing.T) {
 			wantChip8State: func() *chip8.Chip8 {
 				state := chip8.New()
 				state.Registers.V[0x1] = 0x42
+				state.Registers.PC += 2
 
 				return state
 			}(),
@@ -58,7 +59,7 @@ func TestExec(t *testing.T) {
 			wantChip8State: func() *chip8.Chip8 {
 				state := chip8.New()
 				state.Registers.V[0x1] = 0xFF
-				state.Registers.PC += 2
+				state.Registers.PC += 4
 
 				return state
 			}(),
@@ -68,7 +69,12 @@ func TestExec(t *testing.T) {
 			chip8: chip8.New(),
 			args:  argument.ParseArguments(0x31FF),
 
-			wantChip8State: chip8.New(),
+			wantChip8State: func() *chip8.Chip8 {
+				state := chip8.New()
+				state.Registers.PC += 2
+
+				return state
+			}(),
 		},
 		{
 			name: "skip half byte",
@@ -83,7 +89,7 @@ func TestExec(t *testing.T) {
 			wantChip8State: func() *chip8.Chip8 {
 				state := chip8.New()
 				state.Registers.V[0x1] = 0x7F
-				state.Registers.PC += 2
+				state.Registers.PC += 4
 
 				return state
 			}(),
@@ -101,6 +107,7 @@ func TestExec(t *testing.T) {
 			wantChip8State: func() *chip8.Chip8 {
 				state := chip8.New()
 				state.Registers.V[0x1] = 0x42
+				state.Registers.PC += 2
 
 				return state
 			}(),

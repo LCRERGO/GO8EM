@@ -23,7 +23,12 @@ func TestExec(t *testing.T) {
 			chip8: chip8.New(),
 			args:  argument.ParseArguments(0x00E0),
 
-			wantChip8State: chip8.New(),
+			wantChip8State: func() *chip8.Chip8 {
+				state := chip8.New()
+				state.Registers.PC += 2
+
+				return state
+			}(),
 		},
 		{
 			name: "clear an screen with 1 pixel",
@@ -37,7 +42,12 @@ func TestExec(t *testing.T) {
 			}(),
 			args: argument.ParseArguments(0x00E0),
 
-			wantChip8State: chip8.New(),
+			wantChip8State: func() *chip8.Chip8 {
+				state := chip8.New()
+				state.Registers.PC += 2
+
+				return state
+			}(),
 		},
 	}
 
