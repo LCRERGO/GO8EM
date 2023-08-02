@@ -1,3 +1,4 @@
+// SDL video subsystem.
 package video
 
 import (

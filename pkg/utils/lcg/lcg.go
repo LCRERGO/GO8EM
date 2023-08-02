@@ -1,3 +1,4 @@
+// Package of linear congruential generator util.
 package lcg
 
 type LCG struct {

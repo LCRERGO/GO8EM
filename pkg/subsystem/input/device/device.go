@@ -1,3 +1,4 @@
+// Input ROM device subsystem.
 package device
 
 import (

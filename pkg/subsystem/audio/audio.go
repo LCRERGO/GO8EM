@@ -1,3 +1,4 @@
+// SDL audio subsystem.
 package audio
 
 // #include <stdlib.h>

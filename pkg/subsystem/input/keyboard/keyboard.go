@@ -1,3 +1,4 @@
+// Input SDL keyboard subsystem.
 package keyboard
 
 import (
