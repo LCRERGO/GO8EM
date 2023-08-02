@@ -41,6 +41,7 @@ import (
 
 type AudioSubsystem struct {
 	SampleRate int
+	DeviceID   sdl.AudioDeviceID
 }
 
 func New(sampleRate int) *AudioSubsystem {
@@ -50,7 +51,12 @@ func New(sampleRate int) *AudioSubsystem {
 
 	return &AudioSubsystem{
 		SampleRate: sampleRate,
+		DeviceID:   0,
 	}
+}
+
+func Destroy(audio *AudioSubsystem) {
+	sdl.CloseAudioDevice(audio.DeviceID)
 }
 
 func Beep(audio AudioSubsystem, frequency, duration int) {
@@ -66,16 +72,10 @@ func Beep(audio AudioSubsystem, frequency, duration int) {
 		UserData: unsafe.Pointer(userData),
 	}
 
-	if err := sdl.OpenAudio(&spec, nil); err != nil {
-		log.Fatal("beep_audio_subsystem:", err)
-	}
+	deviceID(&audio, &spec)
 
 	sdl.PauseAudio(false)
 	sdl.Delay(uint32(duration))
-}
-
-func Destroy(audio *AudioSubsystem) {
-	sdl.CloseAudio()
 }
 
 //export SineWave
@@ -93,4 +93,17 @@ func SineWave(userdata unsafe.Pointer, stream *C.Uint8, len C.int) {
 		buf[i] = sample
 		buf[i+1] = sample
 	}
+}
+
+func deviceID(audio *AudioSubsystem, spec *sdl.AudioSpec) sdl.AudioDeviceID {
+	if audio.DeviceID <= 0 {
+		deviceID, err := sdl.OpenAudioDevice("", false, spec, nil, sdl.AUDIO_ALLOW_ANY_CHANGE)
+		if err != nil {
+			log.Fatal("beep_audio_subsystem:", err)
+		}
+
+		audio.DeviceID = deviceID
+	}
+
+	return audio.DeviceID
 }
