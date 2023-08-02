@@ -1,3 +1,4 @@
+// A package for "XORing" two registers.
 package instr14
 
 import (

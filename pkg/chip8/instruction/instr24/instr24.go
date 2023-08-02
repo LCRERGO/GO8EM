@@ -1,3 +1,4 @@
+// A package to draw a sprite to screen.
 package instr24
 
 import (

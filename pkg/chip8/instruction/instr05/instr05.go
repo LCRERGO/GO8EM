@@ -1,3 +1,4 @@
+// A package for calling a subroutine.
 package instr05
 
 import (

@@ -1,3 +1,4 @@
+// A package for skip instruction if equals a register.
 package instr08
 
 import (

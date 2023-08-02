@@ -1,3 +1,4 @@
+// A package for a jump to address.
 package instr04
 
 import (

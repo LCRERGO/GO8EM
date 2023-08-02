@@ -1,3 +1,4 @@
+// A package to add Vx into I.
 package instr31
 
 import (

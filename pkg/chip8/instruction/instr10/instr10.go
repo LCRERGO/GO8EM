@@ -1,3 +1,4 @@
+// A package for adding a byte to a register.
 package instr10
 
 import (

@@ -1,3 +1,4 @@
+// A package to store registers V0 to Vx at [I].
 package instr34
 
 import (

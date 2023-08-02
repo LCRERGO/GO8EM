@@ -1,3 +1,4 @@
+// A package to load sprite given by Vx into I.
 package instr32
 
 import (

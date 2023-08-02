@@ -1,3 +1,4 @@
+// A package to load the BCD representation starting at Vx.
 package instr33
 
 import (

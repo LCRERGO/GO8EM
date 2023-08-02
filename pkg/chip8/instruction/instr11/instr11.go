@@ -1,3 +1,4 @@
+// A package for making register receive another register.
 package instr11
 
 import (

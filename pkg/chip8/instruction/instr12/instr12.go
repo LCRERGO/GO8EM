@@ -1,3 +1,4 @@
+// A package for "ORing" two registers.
 package instr12
 
 import (

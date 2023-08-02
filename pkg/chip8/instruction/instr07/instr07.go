@@ -1,3 +1,4 @@
+// A package for skip instruction if not equals a byte.
 package instr07
 
 import (

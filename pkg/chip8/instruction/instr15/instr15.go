@@ -1,3 +1,4 @@
+// A package for adding two registers.
 package instr15
 
 import (

@@ -1,3 +1,4 @@
+// A package to return a subroutine.
 package instr03
 
 import (

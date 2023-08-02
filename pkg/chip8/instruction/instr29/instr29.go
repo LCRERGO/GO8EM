@@ -1,3 +1,4 @@
+// A package to load Vx into delay timer.
 package instr29
 
 import (

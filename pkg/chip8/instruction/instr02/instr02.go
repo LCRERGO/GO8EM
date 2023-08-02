@@ -1,3 +1,4 @@
+// A package to clear the screen.
 package instr02
 
 import (

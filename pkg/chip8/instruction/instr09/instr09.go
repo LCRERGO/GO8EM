@@ -1,3 +1,4 @@
+// A package to set a register as a byte.
 package instr09
 
 import (

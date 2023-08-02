@@ -1,3 +1,4 @@
+// A package to skip a instruction given a keypress.
 package instr25
 
 import (

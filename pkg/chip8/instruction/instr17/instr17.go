@@ -1,3 +1,4 @@
+// A package for shifting right a register.
 package instr17
 
 import (

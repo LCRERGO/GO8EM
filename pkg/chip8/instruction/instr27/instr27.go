@@ -1,3 +1,4 @@
+// A package to load the delay timer into Vx.
 package instr27
 
 import (

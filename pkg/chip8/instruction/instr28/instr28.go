@@ -1,3 +1,4 @@
+// A package to load a key into Vx.
 package instr28
 
 import (

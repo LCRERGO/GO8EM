@@ -1,3 +1,4 @@
+// A package to load Vx into sound timer.
 package instr30
 
 import (

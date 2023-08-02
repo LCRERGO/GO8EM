@@ -1,3 +1,4 @@
+// A package for an error instruction.
 package instr00
 
 import (

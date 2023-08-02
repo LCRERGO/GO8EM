@@ -1,3 +1,4 @@
+// A package to skip a instruction given a key not pressed.
 package instr26
 
 import (

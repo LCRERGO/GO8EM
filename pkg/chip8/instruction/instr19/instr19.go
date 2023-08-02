@@ -1,3 +1,4 @@
+// A package for shifting left a register.
 package instr19
 
 import (

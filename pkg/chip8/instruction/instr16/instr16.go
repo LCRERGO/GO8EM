@@ -1,3 +1,4 @@
+// A package for subtracting two registers.
 package instr16
 
 import (

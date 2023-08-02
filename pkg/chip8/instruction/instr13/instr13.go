@@ -1,3 +1,4 @@
+// A package for "ANDing" two registers.
 package instr13
 
 import (
