@@ -59,7 +59,7 @@ func Destroy(audio *AudioSubsystem) {
 	sdl.CloseAudioDevice(audio.DeviceID)
 }
 
-func Beep(audio AudioSubsystem, frequency, duration int) {
+func Beep(audio *AudioSubsystem, frequency, duration int) {
 	userData := C.NewUserData(C.Uint32(frequency), C.Uint32(audio.SampleRate))
 	defer C.DestroyUserData(userData)
 
@@ -72,9 +72,9 @@ func Beep(audio AudioSubsystem, frequency, duration int) {
 		UserData: unsafe.Pointer(userData),
 	}
 
-	deviceID(&audio, &spec)
+	deviceID(audio, &spec)
 
-	sdl.PauseAudio(false)
+	sdl.PauseAudioDevice(audio.DeviceID, false)
 	sdl.Delay(uint32(duration))
 }
 
@@ -97,7 +97,13 @@ func SineWave(userdata unsafe.Pointer, stream *C.Uint8, len C.int) {
 
 func deviceID(audio *AudioSubsystem, spec *sdl.AudioSpec) sdl.AudioDeviceID {
 	if audio.DeviceID <= 0 {
-		deviceID, err := sdl.OpenAudioDevice("", false, spec, nil, sdl.AUDIO_ALLOW_ANY_CHANGE)
+		deviceID, err := sdl.OpenAudioDevice(
+			"",
+			false,
+			spec,
+			nil,
+			sdl.AUDIO_ALLOW_ANY_CHANGE,
+		)
 		if err != nil {
 			log.Fatal("beep_audio_subsystem:", err)
 		}
