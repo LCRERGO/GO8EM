@@ -2,10 +2,9 @@
 package video
 
 import (
-	"log"
-
 	"github.com/LCRERGO/GO8EM/pkg/chip8/screen"
 	"github.com/LCRERGO/GO8EM/pkg/constants"
+	"github.com/LCRERGO/GO8EM/pkg/utils/log"
 	"github.com/veandco/go-sdl2/sdl"
 )
 

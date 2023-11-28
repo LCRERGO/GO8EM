@@ -31,11 +31,11 @@ package audio
 // }
 import "C"
 import (
-	"log"
 	"math"
 	"reflect"
 	"unsafe"
 
+	"github.com/LCRERGO/GO8EM/pkg/utils/log"
 	"github.com/veandco/go-sdl2/sdl"
 )
 

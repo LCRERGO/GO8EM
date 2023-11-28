@@ -2,11 +2,10 @@
 package instr28
 
 import (
-	"log"
-
 	"github.com/LCRERGO/GO8EM/pkg/chip8"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/instruction/argument"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/register"
+	"github.com/LCRERGO/GO8EM/pkg/utils/log"
 )
 
 // Fx0A - LD Vx, K

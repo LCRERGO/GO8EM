@@ -3,7 +3,8 @@ package keyboard
 
 import (
 	"fmt"
-	"log"
+
+	"github.com/LCRERGO/GO8EM/pkg/utils/log"
 )
 
 type Keyboard struct {

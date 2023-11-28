@@ -3,9 +3,9 @@ package memory
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/LCRERGO/GO8EM/pkg/constants"
+	"github.com/LCRERGO/GO8EM/pkg/utils/log"
 )
 
 // +---------------+= 0xFFF (4095) End of Chip-8 RAM

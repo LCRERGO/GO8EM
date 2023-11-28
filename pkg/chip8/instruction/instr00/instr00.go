@@ -2,10 +2,9 @@
 package instr00
 
 import (
-	"log"
-
 	"github.com/LCRERGO/GO8EM/pkg/chip8"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/instruction/argument"
+	"github.com/LCRERGO/GO8EM/pkg/utils/log"
 )
 
 // Tried to call an invalid instruction

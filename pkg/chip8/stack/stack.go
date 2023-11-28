@@ -3,9 +3,9 @@ package stack
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/LCRERGO/GO8EM/pkg/chip8/register"
+	"github.com/LCRERGO/GO8EM/pkg/utils/log"
 )
 
 // Stack entity that holds data for function return values

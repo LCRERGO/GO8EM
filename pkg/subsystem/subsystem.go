@@ -3,7 +3,6 @@ package subsystem
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"time"
 
@@ -17,6 +16,7 @@ import (
 	"github.com/LCRERGO/GO8EM/pkg/subsystem/input/device"
 	keyboard_map "github.com/LCRERGO/GO8EM/pkg/subsystem/input/keyboard"
 	"github.com/LCRERGO/GO8EM/pkg/subsystem/video"
+	"github.com/LCRERGO/GO8EM/pkg/utils/log"
 	"github.com/veandco/go-sdl2/sdl"
 )
 

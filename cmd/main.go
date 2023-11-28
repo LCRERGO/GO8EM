@@ -19,18 +19,17 @@ package main
 import (
 	"fmt"
 	"os"
-	"time"
 
 	"github.com/LCRERGO/GO8EM/pkg/chip8"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/handler"
+	"github.com/LCRERGO/GO8EM/pkg/config"
 	"github.com/LCRERGO/GO8EM/pkg/subsystem"
-	"github.com/LCRERGO/GO8EM/pkg/utils/lcg"
 )
 
-var randGen *lcg.LCG
+var globalConfig *config.Config
 
 func init() {
-	randGen = lcg.New(int(time.Now().UnixNano()))
+	globalConfig = config.New()
 }
 
 func main() {
@@ -42,7 +41,7 @@ func main() {
 	// setup emulator
 	c8 := chip8.New()
 	defer chip8.Destroy(c8)
-	chip8.AddRandGen(c8, randGen)
+	chip8.AddRandGen(c8, config.GetRandomGenerator(globalConfig))
 	controller := subsystem.New(c8)
 	subsystem.AddROM(controller, os.Args[1])
 	defer subsystem.RemoveROM(controller)
