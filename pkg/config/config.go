@@ -8,6 +8,8 @@ import (
 	"github.com/LCRERGO/GO8EM/pkg/utils/lcg"
 )
 
+var config *Config
+
 type Config struct {
 	buildtags       []string
 	randomGenerator *lcg.LCG
@@ -18,6 +20,15 @@ func New() *Config {
 	return &Config{
 		randomGenerator: lcg.New(int(time.Now().UnixNano())),
 	}
+}
+
+// Get the default instance of the Config.
+func Get() *Config {
+	if config == nil {
+		config = New()
+	}
+
+	return config
 }
 
 // Add more buildtags to a Config.

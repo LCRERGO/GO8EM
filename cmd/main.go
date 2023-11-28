@@ -26,12 +26,6 @@ import (
 	"github.com/LCRERGO/GO8EM/pkg/subsystem"
 )
 
-var globalConfig *config.Config
-
-func init() {
-	globalConfig = config.New()
-}
-
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Printf("Usage: %s filename\n", os.Args[0])
@@ -41,7 +35,7 @@ func main() {
 	// setup emulator
 	c8 := chip8.New()
 	defer chip8.Destroy(c8)
-	chip8.AddRandGen(c8, config.GetRandomGenerator(globalConfig))
+	chip8.AddRandGen(c8, config.GetRandomGenerator(config.Get()))
 	controller := subsystem.New(c8)
 	subsystem.AddROM(controller, os.Args[1])
 	defer subsystem.RemoveROM(controller)
