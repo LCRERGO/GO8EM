@@ -4,10 +4,11 @@ package instr00
 import (
 	"github.com/LCRERGO/GO8EM/pkg/chip8"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/instruction/argument"
-	"github.com/LCRERGO/GO8EM/pkg/utils/log"
+	"github.com/LCRERGO/GO8EM/pkg/config"
 )
 
 // Tried to call an invalid instruction
 func Exec(state *chip8.Chip8, args *argument.OpcodeArguments) {
-	log.Fatal("exec_instr00: invalid instruction")
+	config.GetLogger(config.GetInstance()).
+		Fatal("exec_instr00: invalid instruction")
 }

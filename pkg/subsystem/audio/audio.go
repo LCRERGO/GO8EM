@@ -35,7 +35,7 @@ import (
 	"reflect"
 	"unsafe"
 
-	"github.com/LCRERGO/GO8EM/pkg/utils/log"
+	"github.com/LCRERGO/GO8EM/pkg/config"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
@@ -46,7 +46,8 @@ type AudioSubsystem struct {
 
 func New(sampleRate int) *AudioSubsystem {
 	if err := sdl.Init(sdl.INIT_AUDIO); err != nil {
-		log.Fatal("new_audio_subsystem:", err)
+		config.GetLogger(config.GetInstance()).
+			Fatal("new_audio_subsystem:", err)
 	}
 
 	return &AudioSubsystem{
@@ -105,7 +106,8 @@ func deviceID(audio *AudioSubsystem, spec *sdl.AudioSpec) sdl.AudioDeviceID {
 			sdl.AUDIO_ALLOW_ANY_CHANGE,
 		)
 		if err != nil {
-			log.Fatal("beep_audio_subsystem:", err)
+			config.GetLogger(config.GetInstance()).
+				Fatal("beep_audio_subsystem:", err)
 		}
 
 		audio.DeviceID = deviceID

@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/LCRERGO/GO8EM/pkg/utils/lcg"
+	"github.com/LCRERGO/GO8EM/pkg/utils/log"
 )
 
 var config *Config
@@ -13,6 +14,7 @@ var config *Config
 type Config struct {
 	buildtags       []string
 	randomGenerator *lcg.LCG
+	logger          log.Logger
 }
 
 // Create a new Config.
@@ -23,7 +25,7 @@ func New() *Config {
 }
 
 // Get the default instance of the Config.
-func Get() *Config {
+func GetInstance() *Config {
 	if config == nil {
 		config = New()
 	}
@@ -40,11 +42,22 @@ func AddBuildTag(config *Config, buildtags ...string) {
 	}
 }
 
+// Check if a buildtag is included on Config.
 func HasTag(config *Config, buildtag string) bool {
 	return slices.Contains(config.buildtags, buildtag)
 }
 
-// Retrives the default randomGenerator
+// Add a logger to Config.
+func AddLogger(config *Config, logger log.Logger) {
+	config.logger = logger
+}
+
+// Get the logger from Config.
+func GetLogger(config *Config) log.Logger {
+	return config.logger
+}
+
+// Retrives the default randomGenerator.
 func GetRandomGenerator(config *Config) *lcg.LCG {
 	return config.randomGenerator
 }

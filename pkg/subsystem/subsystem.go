@@ -11,12 +11,12 @@ import (
 	"github.com/LCRERGO/GO8EM/pkg/chip8/keyboard"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/memory"
 	"github.com/LCRERGO/GO8EM/pkg/chip8/register"
+	"github.com/LCRERGO/GO8EM/pkg/config"
 	"github.com/LCRERGO/GO8EM/pkg/constants"
 	"github.com/LCRERGO/GO8EM/pkg/subsystem/audio"
 	"github.com/LCRERGO/GO8EM/pkg/subsystem/input/device"
 	keyboard_map "github.com/LCRERGO/GO8EM/pkg/subsystem/input/keyboard"
 	"github.com/LCRERGO/GO8EM/pkg/subsystem/video"
-	"github.com/LCRERGO/GO8EM/pkg/utils/log"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
@@ -71,7 +71,8 @@ func WaitForKeyPress(controller *SubsystemController) func() (int, error) {
 						keySymbol := t.Keysym.Sym
 						repr, err := keyboard_map.GetKeyRepr(keySymbol)
 						if err != nil {
-							log.Printf("wait_for_key_press: %v", err)
+							config.GetLogger(config.GetInstance()).
+								Printf("wait_for_key_press: %v", err)
 						}
 						return repr, nil
 					}
@@ -112,7 +113,8 @@ func loadROM2Memory(controller *SubsystemController) {
 		rom := make([]byte, constants.ROMMaxSize)
 		_, err := controller.inputDevice.File.Read(rom)
 		if err != nil {
-			log.Fatalf("load_rom_2_memory: %v", err)
+			config.GetLogger(config.GetInstance()).
+				Fatalf("load_rom_2_memory: %v", err)
 		}
 
 		memory.LoadROM(controller.chip8.Memory, rom, controller.inputDevice.Size)
@@ -132,7 +134,8 @@ func handleEvents(controller *SubsystemController) {
 			keySymbol := t.Keysym.Sym
 			repr, err := keyboard_map.GetKeyRepr(keySymbol)
 			if err != nil {
-				log.Printf("handle_events: %v", err)
+				config.GetLogger(config.GetInstance()).
+					Printf("handle_events: %v", err)
 			}
 
 			if t.Type == sdl.KEYDOWN {

@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/LCRERGO/GO8EM/pkg/chip8/register"
-	"github.com/LCRERGO/GO8EM/pkg/utils/log"
+	"github.com/LCRERGO/GO8EM/pkg/config"
 )
 
 // Stack entity that holds data for function return values
@@ -42,7 +42,8 @@ func Destroy(stack *Stack) {
 // A RegisterFile should be passed for altering SP properlly.
 func Push(stack *Stack, registers *register.RegisterFile, address uint16) {
 	if !isValidSP(registers.SP) {
-		log.Fatal("stack_push: invalid sp")
+		config.GetLogger(config.GetInstance()).
+			Fatal("stack_push: invalid sp")
 	}
 	stack.data[registers.SP] = address
 	registers.SP++
@@ -55,7 +56,8 @@ func Pop(stack *Stack, registers *register.RegisterFile) uint16 {
 	var address uint16
 
 	if !isValidSP(registers.SP) {
-		log.Fatal("stack_pop: invalid sp")
+		config.GetLogger(config.GetInstance()).
+			Fatal("stack_pop: invalid sp")
 	}
 	address = stack.data[registers.SP-1]
 	stack.data[registers.SP-1] = 0x00

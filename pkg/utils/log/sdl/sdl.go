@@ -3,30 +3,37 @@ package sdl
 
 import "log"
 
-type Logger struct {
+type Logger interface {
+	Print(v ...any)
+	Printf(format string, v ...any)
+	Fatal(v ...any)
+	Fatalf(format string, v ...any)
+}
+
+type logger struct {
 	l *log.Logger
 }
 
-func New() *Logger {
-	return &Logger{
+func New() Logger {
+	return &logger{
 		l: log.Default(),
 	}
 }
 
-func Print(logger *Logger, v ...any) {
+func (logger *logger) Print(v ...any) {
 	logger.l.Print(v...)
 }
 
-func Printf(logger *Logger, format string, v ...any) {
+func (logger *logger) Printf(format string, v ...any) {
 	logger.l.Printf(format, v...)
 }
 
-func Fatal(logger *Logger, v ...any) {
+func (logger *logger) Fatal(v ...any) {
 	logger.l.Fatal(v...)
 	panic(v)
 }
 
-func Fatalf(logger *Logger, format string, v ...any) {
+func (logger *logger) Fatalf(format string, v ...any) {
 	logger.l.Fatalf(format, v...)
 	panic(v)
 }

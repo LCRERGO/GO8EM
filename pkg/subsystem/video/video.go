@@ -3,8 +3,8 @@ package video
 
 import (
 	"github.com/LCRERGO/GO8EM/pkg/chip8/screen"
+	"github.com/LCRERGO/GO8EM/pkg/config"
 	"github.com/LCRERGO/GO8EM/pkg/constants"
-	"github.com/LCRERGO/GO8EM/pkg/utils/log"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
@@ -15,7 +15,8 @@ type VideoSubsystem struct {
 
 func New() *VideoSubsystem {
 	if err := sdl.Init(sdl.INIT_VIDEO); err != nil {
-		log.Fatal("new_video_subsystem: ", err)
+		config.GetLogger(config.GetInstance()).
+			Fatal("new_video_subsystem: ", err)
 	}
 
 	window, err := sdl.CreateWindow(constants.WindowTitle,
@@ -24,12 +25,14 @@ func New() *VideoSubsystem {
 		constants.ScreenHeight*constants.ScreenScaleFactor,
 		sdl.WINDOW_SHOWN)
 	if err != nil {
-		log.Fatal("new_video_subsystem: ", err)
+		config.GetLogger(config.GetInstance()).
+			Fatal("new_video_subsystem: ", err)
 	}
 
 	renderer, err := sdl.CreateRenderer(window, -1, sdl.TEXTUREACCESS_TARGET)
 	if err != nil {
-		log.Fatal("new_video_subsystem: ", err)
+		config.GetLogger(config.GetInstance()).
+			Fatal("new_video_subsystem: ", err)
 	}
 
 	return &VideoSubsystem{
@@ -41,15 +44,18 @@ func New() *VideoSubsystem {
 func Render(video *VideoSubsystem, screenData *screen.Screen) {
 	err := video.Renderer.SetDrawColor(0, 0, 0, sdl.ALPHA_OPAQUE)
 	if err != nil {
-		log.Fatal("render_video_subsystem: ", err)
+		config.GetLogger(config.GetInstance()).
+			Fatal("render_video_subsystem: ", err)
 	}
 	err = video.Renderer.Clear()
 	if err != nil {
-		log.Fatal("render_video_subsystem: ", err)
+		config.GetLogger(config.GetInstance()).
+			Fatal("render_video_subsystem: ", err)
 	}
 	err = video.Renderer.SetDrawColor(255, 255, 255, sdl.ALPHA_OPAQUE)
 	if err != nil {
-		log.Fatal("render_video_subsystem: ", err)
+		config.GetLogger(config.GetInstance()).
+			Fatal("render_video_subsystem: ", err)
 	}
 
 	for x := 0; x < constants.ScreenWidth; x++ {

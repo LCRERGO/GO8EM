@@ -4,8 +4,8 @@ package memory
 import (
 	"fmt"
 
+	"github.com/LCRERGO/GO8EM/pkg/config"
 	"github.com/LCRERGO/GO8EM/pkg/constants"
-	"github.com/LCRERGO/GO8EM/pkg/utils/log"
 )
 
 // +---------------+= 0xFFF (4095) End of Chip-8 RAM
@@ -74,7 +74,8 @@ func Destroy(memory *Memory) {
 // for the position and a value to be set.
 func Set(memory *Memory, index int, val uint8) {
 	if !isValidIndex(index) {
-		log.Fatal("memory_set: invalid index")
+		config.GetLogger(config.GetInstance()).
+			Fatal("memory_set: invalid index")
 	}
 	memory.data[index] = val
 }
@@ -82,7 +83,8 @@ func Set(memory *Memory, index int, val uint8) {
 // Get a single byte from a Memory given an index.
 func Get(memory *Memory, index int) uint8 {
 	if !isValidIndex(index) {
-		log.Fatal("memory_get: invalid index")
+		config.GetLogger(config.GetInstance()).
+			Fatal("memory_get: invalid index")
 	}
 	return memory.data[index]
 }
@@ -90,7 +92,8 @@ func Get(memory *Memory, index int) uint8 {
 // Get two bytes from a Memory given a starting index.
 func Get16(memory *Memory, index int) uint16 {
 	if !isValidIndex(index) {
-		log.Fatal("memory_get16: invalid index")
+		config.GetLogger(config.GetInstance()).
+			Fatal("memory_get16: invalid index")
 	}
 	var fstByte uint16 = uint16(Get(memory, index))
 	var sndByte uint16 = uint16(Get(memory, index+1))

@@ -4,7 +4,7 @@ package keyboard
 import (
 	"fmt"
 
-	"github.com/LCRERGO/GO8EM/pkg/utils/log"
+	"github.com/LCRERGO/GO8EM/pkg/config"
 )
 
 type Keyboard struct {
@@ -56,7 +56,8 @@ func Destroy(keyboard *Keyboard) {
 // Get Key current state from a Keyboard.
 func KeyStatus(keyboard *Keyboard, key int) bool {
 	if !isValidKey(keyboard, key) {
-		log.Print("keyboard_key_status: invalid key")
+		config.GetLogger(config.GetInstance()).
+			Print("keyboard_key_status: invalid key")
 	}
 	return keyboard.data[key]
 }
@@ -74,7 +75,8 @@ func IsDown(keyboard *Keyboard, key int) bool {
 // Set Key down in a Keyboard.
 func SetKeyDown(keyboard *Keyboard, key int) {
 	if !isValidKey(keyboard, key) {
-		log.Print("keyboard_set_key_down: invalid key")
+		config.GetLogger(config.GetInstance()).
+			Print("keyboard_set_key_down: invalid key")
 	}
 	keyboard.data[key] = true
 }
@@ -82,7 +84,8 @@ func SetKeyDown(keyboard *Keyboard, key int) {
 // Set Key up in a Keyboard.
 func SetKeyUp(keyboard *Keyboard, key int) {
 	if !isValidKey(keyboard, key) {
-		log.Print("keyboard_set_key_up: invalid key")
+		config.GetLogger(config.GetInstance()).
+			Print("keyboard_set_key_up: invalid key")
 	}
 	keyboard.data[key] = false
 }

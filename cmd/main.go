@@ -24,7 +24,13 @@ import (
 	"github.com/LCRERGO/GO8EM/pkg/chip8/handler"
 	"github.com/LCRERGO/GO8EM/pkg/config"
 	"github.com/LCRERGO/GO8EM/pkg/subsystem"
+	sdllog "github.com/LCRERGO/GO8EM/pkg/utils/log/sdl"
 )
+
+func init() {
+	globalConfig := config.New()
+	config.AddLogger(globalConfig, sdllog.New())
+}
 
 func main() {
 	if len(os.Args) < 2 {
@@ -35,7 +41,7 @@ func main() {
 	// setup emulator
 	c8 := chip8.New()
 	defer chip8.Destroy(c8)
-	chip8.AddRandGen(c8, config.GetRandomGenerator(config.Get()))
+	chip8.AddRandGen(c8, config.GetRandomGenerator(config.GetInstance()))
 	controller := subsystem.New(c8)
 	subsystem.AddROM(controller, os.Args[1])
 	defer subsystem.RemoveROM(controller)
