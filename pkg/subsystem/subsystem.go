@@ -25,7 +25,8 @@ type SubsystemController struct {
 	audio       *audio.AudioSubsystem
 	video       *video.VideoSubsystem
 
-	chip8 *chip8.Chip8
+	chip8     *chip8.Chip8
+	timerTick int
 }
 
 func New(chip8 *chip8.Chip8) *SubsystemController {
@@ -99,8 +100,7 @@ func step(controller *SubsystemController) {
 	if controller.inputDevice != nil {
 		handleEvents(controller)
 		video.Render(controller.video, controller.chip8.Screen)
-		handleDelayTimer(controller)
-		handleSoundTimer(controller)
+		handleTimerTick(controller)
 
 		opcode := chip8.FetchOpcode(controller.chip8)
 		instr, args := instruction.Decode(opcode)
@@ -138,9 +138,10 @@ func handleEvents(controller *SubsystemController) {
 					Printf("handle_events: %v", err)
 			}
 
-			if t.Type == sdl.KEYDOWN {
+			switch t.Type {
+			case sdl.KEYDOWN:
 				keyboard.SetKeyDown(controller.chip8.Keyboard, repr)
-			} else if t.Type == sdl.KEYUP {
+			case sdl.KEYUP:
 				keyboard.SetKeyUp(controller.chip8.Keyboard, repr)
 			}
 		default:
@@ -150,18 +151,21 @@ func handleEvents(controller *SubsystemController) {
 	}
 }
 
-func handleDelayTimer(controller *SubsystemController) {
-	for controller.chip8.Registers.DT > 0 {
-		time.Sleep(constants.ClockFrequency * time.Microsecond)
+func handleTimerTick(controller *SubsystemController) {
+	controller.timerTick++
+	if controller.timerTick < 12 {
+		return
+	}
+	controller.timerTick = 0
+
+	if controller.chip8.Registers.DT > 0 {
 		register.DecDT(controller.chip8.Registers)
 	}
-}
 
-func handleSoundTimer(controller *SubsystemController) {
 	if controller.chip8.Registers.ST > 0 {
-		go audio.Beep(controller.audio,
-			12500,
-			100*int(controller.chip8.Registers.ST))
-		register.ResetST(controller.chip8.Registers)
+		audio.Start(controller.audio)
+		register.DecST(controller.chip8.Registers)
+	} else {
+		audio.Stop(controller.audio)
 	}
 }

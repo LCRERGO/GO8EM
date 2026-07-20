@@ -1,38 +1,52 @@
 // SDL audio subsystem.
 package audio
 
+// #cgo LDFLAGS: -lm
 // #include <stdlib.h>
 // #include <stdint.h>
 // #include <math.h>
 // typedef unsigned char Uint8;
 // typedef uint32_t Uint32;
-// void SineWave(void *userdata, Uint8 *stream, int len);
 //
 // typedef struct UserData {
-// 		int frequency;
-// 		int sampleRate;
-//		float dPhase;
+//     int playing;
+//     double dPhase;
+//     double phase;
 // } UserData;
 //
-// __attribute__((weak))
-// UserData* NewUserData(Uint32 frequency, Uint32 sampleRate) {
-//    UserData* userdata = malloc(sizeof(UserData));
-//    userdata->frequency = frequency;
-//    userdata->sampleRate = sampleRate;
-//    userdata->dPhase = 2 * M_PI * frequency / sampleRate;
-//
-//    return userdata;
+// void SineWave(void *userdata, Uint8 *stream, int len) {
+//     UserData* data = (UserData*)userdata;
+//     if (!data || !data->playing) {
+//         for (int i = 0; i < len; i++) {
+//             stream[i] = 128;
+//         }
+//         if (data) data->phase = 0.0;
+//         return;
+//     }
+//     for (int i = 0; i < len; i++) {
+//         data->phase += data->dPhase;
+//         double sample = sin(data->phase);
+//         stream[i] = (Uint8)((sample + 1.0) * 127.5);
+//     }
 // }
 //
-// __attribute__((weak))
-// void DestroyUserData(UserData* userdata) {
-//    if (userdata)
-//        free(userdata);
+// UserData* NewUserData(int sampleRate) {
+//     UserData* data = (UserData*)malloc(sizeof(UserData));
+//     data->playing = 0;
+//     data->dPhase = 2.0 * M_PI * 440.0 / sampleRate;
+//     data->phase = 0.0;
+//     return data;
+// }
+//
+// void DestroyUserData(UserData* data) {
+//     if (data) free(data);
+// }
+//
+// void SetPlaying(UserData* data, int playing) {
+//     if (data) data->playing = playing;
 // }
 import "C"
 import (
-	"math"
-	"reflect"
 	"unsafe"
 
 	"github.com/LCRERGO/GO8EM/pkg/config"
@@ -42,6 +56,7 @@ import (
 type AudioSubsystem struct {
 	SampleRate int
 	DeviceID   sdl.AudioDeviceID
+	userData   *C.UserData
 }
 
 func New(sampleRate int) *AudioSubsystem {
@@ -50,68 +65,58 @@ func New(sampleRate int) *AudioSubsystem {
 			Fatal("new_audio_subsystem:", err)
 	}
 
-	return &AudioSubsystem{
+	userData := C.NewUserData(C.int(sampleRate))
+
+	audio := &AudioSubsystem{
 		SampleRate: sampleRate,
 		DeviceID:   0,
+		userData:   userData,
 	}
-}
-
-func Destroy(audio *AudioSubsystem) {
-	sdl.CloseAudioDevice(audio.DeviceID)
-}
-
-func Beep(audio *AudioSubsystem, frequency, duration int) {
-	userData := C.NewUserData(C.Uint32(frequency), C.Uint32(audio.SampleRate))
-	defer C.DestroyUserData(userData)
 
 	spec := sdl.AudioSpec{
-		Freq:     int32(audio.SampleRate),
+		Freq:     int32(sampleRate),
 		Format:   sdl.AUDIO_U8,
-		Channels: 2,
+		Channels: 1,
 		Samples:  512,
 		Callback: sdl.AudioCallback(C.SineWave),
 		UserData: unsafe.Pointer(userData),
 	}
 
-	deviceID(audio, &spec)
-
-	sdl.PauseAudioDevice(audio.DeviceID, false)
-	sdl.Delay(uint32(duration))
-}
-
-//export SineWave
-func SineWave(userdata unsafe.Pointer, stream *C.Uint8, len C.int) {
-	n := int(len)
-	hdr := reflect.SliceHeader{Data: uintptr(unsafe.Pointer(stream)), Len: n, Cap: n}
-	buf := *(*[]C.Uint8)(unsafe.Pointer(&hdr))
-
-	data := (*C.UserData)(userdata)
-
-	var phase float64
-	for i := 0; i < n; i += 2 {
-		phase += float64(data.dPhase)
-		sample := C.Uint8((math.Sin(phase) + 0.999999) * 128)
-		buf[i] = sample
-		buf[i+1] = sample
+	deviceID, err := sdl.OpenAudioDevice(
+		"",
+		false,
+		&spec,
+		nil,
+		sdl.AUDIO_ALLOW_ANY_CHANGE,
+	)
+	if err != nil {
+		config.GetLogger(config.GetInstance()).
+			Fatal("new_audio_subsystem:", err)
 	}
+
+	audio.DeviceID = deviceID
+	return audio
 }
 
-func deviceID(audio *AudioSubsystem, spec *sdl.AudioSpec) sdl.AudioDeviceID {
-	if audio.DeviceID <= 0 {
-		deviceID, err := sdl.OpenAudioDevice(
-			"",
-			false,
-			spec,
-			nil,
-			sdl.AUDIO_ALLOW_ANY_CHANGE,
-		)
-		if err != nil {
-			config.GetLogger(config.GetInstance()).
-				Fatal("beep_audio_subsystem:", err)
+func Destroy(audio *AudioSubsystem) {
+	if audio != nil {
+		if audio.DeviceID > 0 {
+			sdl.CloseAudioDevice(audio.DeviceID)
 		}
-
-		audio.DeviceID = deviceID
+		C.DestroyUserData(audio.userData)
 	}
+}
 
-	return audio.DeviceID
+func Start(audio *AudioSubsystem) {
+	if audio != nil && audio.userData != nil {
+		C.SetPlaying(audio.userData, 1)
+		sdl.PauseAudioDevice(audio.DeviceID, false)
+	}
+}
+
+func Stop(audio *AudioSubsystem) {
+	if audio != nil && audio.userData != nil {
+		sdl.PauseAudioDevice(audio.DeviceID, true)
+		C.SetPlaying(audio.userData, 0)
+	}
 }

@@ -56,6 +56,13 @@ func DecDT(registers *RegisterFile) {
 	registers.DT--
 }
 
+// Decrement the ST register from a RegisterFile.
+func DecST(registers *RegisterFile) {
+	if registers.ST > 0 {
+		registers.ST--
+	}
+}
+
 // Reset the ST register from a RegisterFile.
 func ResetST(registers *RegisterFile) {
 	registers.ST = 0
